@@ -15,7 +15,6 @@
                 "https://cdn.jsdelivr.net/npm/axios@0.x/dist/axios.min.js",
                 "35/source/components/tc-header.js",
                 "35/source/components/tc-param.js",
-                "35/source/js/(JobC)ジョブエントリー管理.js",
                 "functions.js",
                 "35/dist/35.min.js"
             ],
