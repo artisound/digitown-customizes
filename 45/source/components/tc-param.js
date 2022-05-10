@@ -1,4 +1,5 @@
 Vue.component('tc-param', {
+    name: 'tcParam',
     props: ['group', 'ssect', 'scost', 'officeInfoRecId', 'officeName'],
     template: `
     <!-- 管理者のみ見られる情報 -->
