@@ -11,6 +11,9 @@ const appId_entry       = 35;                                               // �
 const office_info       = 28                                                // 事業所管理
 const APP_ID            = kintone.app.getId();                              // LINE友だち管理のアプリID
 
+const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
+const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
+
 const lxn               = luxon.DateTime.fromJSDate(new Date());
 const lxnY              = lxn.toFormat('yyyy');
 const lxnM              = lxn.toFormat('MM');
