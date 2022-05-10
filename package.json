@@ -34,7 +34,8 @@
     "build-45": "webpack --config 45/webpack.config.js",
     "lint-45": "eslint 45/ --ext .js",
     "lint-45-fix": "eslint 45/ --ext .js --fix",
-    "dev-tool": "kintone-cli dev --app-name 35 --watch --localhost && kintone-cli dev --app-name 45 --watch --localhost",
-    "deploy": "kintone-cli build --app-name 35 && kintone-cli build --app-name 45 && kintone-cli deploy --app-name 35 && kintone-cli deploy --app-name 45"
+    "deploy": "kintone-cli build --app-name 35 && kintone-cli build --app-name 45 && kintone-cli deploy --app-name 35 && kintone-cli deploy --app-name 45",
+    "deploy-35": "kintone-cli build --app-name 35 && kintone-cli deploy --app-name 35",
+    "deploy-45": "kintone-cli build --app-name 45 && kintone-cli deploy --app-name 45"
   }
 }
