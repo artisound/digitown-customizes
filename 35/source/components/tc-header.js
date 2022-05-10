@@ -1,3 +1,7 @@
+const VIEW_ID           = 5789206;                                          // アプリのビューID
+const APP_ID            = kintone.app.getId();                              // LINE友だち管理のアプリID
+const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
+const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
 const LOGIN_USER        = kintone.getLoginUser()['code'];                   // kintoneのログインユーザー
 const minBirthYear      = 10;
 const maxBirthYear      = 89;
@@ -89,10 +93,74 @@ Vue.component('tc-header', {
 		});
 	},
 	methods: {
+		/** ---------------------------------------------------------------------
+		 * kintoneで検索するためのクエリを作成する関数
+		 * @param {object} obj selectedオブジェクト
+		--------------------------------------------------------------------- */
+		getQueryText(obj) {
+			let aryQuery = [
+				'LINEユーザーID != ""'
+			];
+
+			for (const KEY in obj) {
+				const NEW_VALUE = obj[KEY];
+				if (Array.isArray(NEW_VALUE)) {
+					// 配列
+					if (!NEW_VALUE) continue;
+					if (NEW_VALUE.length < 1) continue;
+					let objyQuery = {
+						[KEY]: []
+					};
+					for (const INDEX in NEW_VALUE) {
+						objyQuery[KEY].push(`"${NEW_VALUE[INDEX]}"`);
+					}
+					aryQuery.push(`${KEY} in (${objyQuery[KEY].join(", ")})`);
+				} else {
+					// 文字列
+					if (!NEW_VALUE) continue;
+					if (NEW_VALUE.length < 1) continue;
+					switch (KEY) {
+						case '郵便番号':
+						case '市名':
+						case '希望職種':
+						case '希望詳細職種':
+						case '希望業種':
+						case '希望詳細業種':
+							aryQuery.push(`${KEY} like "${NEW_VALUE}"`);
+							break;
+						default:
+							aryQuery.push(`${KEY} = "${NEW_VALUE}"`);
+							break;
+					}
+				}
+			}
+			return aryQuery.join(' and ');
+		},
 		onAdmin() {
 			const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];
 			el.style.display = el.style.display == 'block' ? 'none' : 'block';
 			this.isAdminOpen = el.style.display == 'block';
+		},
+		onClear() {
+			this.inputInfo  = { '年代': [], '性別': [] };
+			this.userInfo   = {};
+			this.onSearch();
+		},
+		/** ---------------------------------------------------------------------
+		 * 検索ボタンが押された時の処理
+		--------------------------------------------------------------------- */
+		onSearch() {
+			const query             = encodeURI(this.getQueryText(this.inputInfo));
+			const url               = `${APP_URL}?view=${VIEW_ID}&query=${query}&ssect=${this.ssect}&scost=${this.scost}&officeGroup=${this.group}`;
+			let ui_query            = '';
+			let aryUiQuery          = [];
+			for (let key in this.userInfo) {
+					if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
+			}
+
+			if (aryUiQuery.length) ui_query = aryUiQuery.join(' and ');
+
+			window.location.href    = ui_query ? `${url}&ui_query=${ui_query}` : url;
 		},
 	},
 	template: `
@@ -342,6 +410,31 @@ Vue.component('tc-header', {
 							hide-details="auto"
 						></v-text-field>
 					</v-form>
+				</div>
+
+				<!-- ボタン -->
+				<div
+					class="d-flex align-items-center p-2"
+				>
+					<v-spacer></v-spacer>
+					<!-- 検索条件クリアボタン -->
+					<v-btn
+						class="fw-bold fs-3"
+						x-large
+						@click="onClear()"
+					>
+						クリア
+					</v-btn>
+
+					<!-- 絞り込むボタン -->
+					<v-btn
+						class="fw-bold fs-3"
+						x-large
+						color="primary"
+						@click="onSearch()"
+					>
+						絞り込む
+					</v-btn>
 				</div>
 			</v-sheet>
 		</div>
