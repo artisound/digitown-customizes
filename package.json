@@ -5,24 +5,25 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@kintone/kintone-ui-component": "^0.6.0"
+    "@kintone/kintone-ui-component": "^0.6.0",
+    "@kintone/rest-api-client": "^2.0.38"
   },
   "devDependencies": {
-    "local-web-server": "^2.6.1",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.2.3",
-    "babel-loader": "^8.0.5",
-    "style-loader": "^0.23.1",
-    "css-loader": "^2.1.0",
-    "core-js": "^3.2.1",
-    "regenerator-runtime": "^0.13.3",
     "@babel/core": "^7.3.3",
-    "@babel/preset-env": "^7.3.1",
     "@babel/plugin-proposal-class-properties": "^7.3.3",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@cybozu/eslint-config": ">=7.1.0",
     "@kintone/customize-uploader": "^2.0.5",
+    "babel-loader": "^8.0.5",
+    "core-js": "^3.2.1",
+    "css-loader": "^2.1.0",
     "eslint": "^6.5.1",
-    "@cybozu/eslint-config": ">=7.1.0"
+    "local-web-server": "^2.6.1",
+    "regenerator-runtime": "^0.13.3",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.2.3"
   },
   "scripts": {
     "dev": "ws",
@@ -34,7 +35,7 @@
     "build-45": "webpack --config 45/webpack.config.js",
     "lint-45": "eslint 45/ --ext .js",
     "lint-45-fix": "eslint 45/ --ext .js --fix",
-    "dev-tool": "kintone-cli dev --app-name 35 --watch --localhost && kintone-cli dev --app-name 45 --watch --localhost",
+    "dev-tool": "kintone-cli dev --app-name 35 --watch && kintone-cli dev --app-name 45 --watch",
     "deploy": "kintone-cli build --app-name 35 && kintone-cli build --app-name 45 && kintone-cli deploy --app-name 35 && kintone-cli deploy --app-name 45"
   }
 }
