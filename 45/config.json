@@ -16,7 +16,6 @@
                 "https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js",
                 "https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js",
                 "https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table-vue.min.js",
-                "https://js.cybozu.com/kintone-rest-api-client/2.0.2/KintoneRestAPIClient.min.js",
                 "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js",
                 "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js",
                 "https://cdn.jsdelivr.net/npm/vue-good-table@2/dist/vue-good-table.js",
@@ -27,7 +26,7 @@
                 "45/source/js/encoding.js",
                 "45/source/js/tab(2).js",
                 "45/source/js/デジ町_LINE友だち管理.js",
-                "../../functions.js",
+                "functions.js",
                 "45/dist/45.min.js"
             ],
             "css": [
@@ -49,7 +48,7 @@
         },
         "mobile": {
             "js": [
-                "../../functions.js",
+                "functions.js",
                 "45/dist/45.min.js"
             ]
         }
