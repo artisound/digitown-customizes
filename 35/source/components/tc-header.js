@@ -3,13 +3,16 @@ const APP_ID            = kintone.app.getId();                              // L
 const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
 const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
 const LOGIN_USER        = kintone.getLoginUser()['code'];                   // kintoneのログインユーザー
+const appId_user        = 45;                                               // LINE友だち管理
+const appId_scout       = 33;                                               // スカウト
+const office_info       = 28
 const minBirthYear      = 10;
 const maxBirthYear      = 89;
 const lxn               = luxon.DateTime.fromJSDate(new Date());
 const lxnY              = lxn.toFormat('yyyy');
 Vue.component('tc-header', {
 	name: 'tc-header',
-	props: ['client', 'aryMasterRecord'],
+	props: ['client'],
 	data() {
 		return {
 			aryAge: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
@@ -95,14 +98,13 @@ Vue.component('tc-header', {
 	},
 	watch: {
 		isShowScout(newVal) {
-			if (newVal) {
-				this.aryRecord = this.aryMasterRecord;
-			} else {
-				this.aryRecord = this.aryMasterRecord.filter(record => record.スカウト状態.value == ' - ' );
+			if (!newVal) {
+				this.aryRecord = this.aryRecord.filter(record => record.スカウト状態.value == ' - ' );
 			}
 		}
 	},
 	async mounted() {
+		const client = this.client;
 		// カスタマイズ一覧の選択等を非表示にする
 		const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];
 		el.style.display = 'none';
@@ -122,11 +124,92 @@ Vue.component('tc-header', {
 			if (results.length) this.isAdmin = true;
 		});
 
-		this.aryCity = await _connectMySQLaxios({
-			db: { name: 'tc2_digitown' },
-			action: 'get',
-			table: 'dt1_city_master'
-		});
+		const officeInfoParam = {
+			app:				office_info,
+			condition:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
+			fields:			['レコード番号', '事業所名', '残高']
+		};
+
+		const aryOfficeInfo = await client.record.getAllRecords(officeInfoParam);
+		if (!aryOfficeInfo) return;
+
+		
+		const userRecord			= aryOfficeInfo[0];
+		this.holdingTicket		= Number(userRecord['残高']['value']);
+		this.officeInfoRecId	= Number(userRecord['レコード番号']['value']);
+
+		
+		const objUserInfoParam = {
+			app:    appId_user,
+			condition:  'LINEユーザーID != "" and 友達状態 in ("友だち") and 年齢_年_ >= 16',
+			fields: ['レコード番号', 'LINEユーザーID', '表示名', '誕生年', '誕生月']
+		};
+
+		if(getParam('ui_query')) objUserInfoParam.query = objUserInfoParam.query + ' and ' + getParam('ui_query');
+
+		// LINE友だち管理からレコードを取得する
+		const aryUserInfo = await client.record.getAllRecords(objUserInfoParam);
+
+		const body = {
+			app: APP_ID,
+			query: `${getParam("query")} limit 500 offset 0`
+		};
+
+		kintone.api(
+			kintone.api.url('/k/v1/records', true),
+			'GET',
+			body,
+			async resp => {
+				this.aryRecord = resp.records;
+				// LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
+				this.aryRecord = this.aryRecord.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
+				// 配列の要素をカンマ区切りの文字列に変更する
+				this.aryRecord = this.aryRecord.map(record => {
+					record.勤務地   = { value: record.勤務地.value.join(', ') };
+					record.契約形態 = { value: record.契約形態.value.join(', ') };
+					record.曜日     = { value: record.曜日.value.join(', ') };
+
+					return record;
+				});
+
+				this.aryRecord = this.aryRecord.map(record => {
+					const rec = aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value);
+					return rec ? Object.assign(rec, record) : record;
+				});
+
+				// スカウト情報を取得する
+				const objScoutParam = {
+					app:    appId_scout,
+					condition:  'LINEユーザーID != ""',
+					fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
+				};
+
+				const aryScout = await client.record.getAllRecords(objScoutParam);
+				this.aryRecord = this.aryRecord.map(record => {
+					const recs = aryScout.filter(r => r.LINEユーザーID.value == record.LINEユーザーID.value );
+
+					record.スカウト状態 = recs.length ? { value: recs[recs.length - 1].スカウト状態.value } : { value: ' - ' };
+					return record;
+				});
+
+				this.aryRecord.map(record => {
+					return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
+				});
+
+				this.aryCity = await _connectMySQLaxios({
+					db: { name: 'tc2_digitown' },
+					action: 'get',
+					table: 'dt1_city_master'
+				});
+
+				// // 絞り込み条件をフォームに反映させる
+				this.paramsToForm(getParam('query'), this.inputInfo);
+				this.paramsToForm(getParam('ui_query'), this.userInfo);
+			},
+			err => {
+				console.log(err);
+			}
+		);
 	},
 	methods: {
 		/** ---------------------------------------------------------------------
@@ -171,6 +254,48 @@ Vue.component('tc-header', {
 				}
 			}
 			return aryQuery.join(' and ');
+		},
+		getSepaText(text) {
+			let sepaText = '';
+			if (text.indexOf(' >= ') >= 0) {
+				sepaText = ' >= ';
+			} else if (text.indexOf(' != ') >= 0) {
+				sepaText = ' != ';
+			} else if (text.indexOf(' = ') >= 0) {
+				sepaText = ' = ';
+			} else if (text.indexOf(' in ') >= 0) {
+				sepaText = ' in ';
+			} else if (text.indexOf(' like ') >= 0) {
+				sepaText = ' like ';
+			}
+			return sepaText;
+		},
+		paramsToForm(params, inputData) {
+			if (!params) return;
+			const sepaParams = params.split(' and ');
+			sepaParams.forEach(param => {
+				const sepaText = this.getSepaText(param);
+				const splits = param.split(sepaText);
+				let value = splits[1];
+				value = value.replaceAll('"', '');
+
+				switch (sepaText) {
+					case ' = ':
+						if (Number(value)) {
+							value = Number(value);
+						}
+						break;
+					case ' in ':
+						value = value.replace('(', '');
+						value = value.replace(')', '');
+						value = value.split(', ');
+						break;
+					default:
+						break;
+				}
+
+				inputData[splits[0]] = value;
+			});
 		},
 		onAdmin() {
 			const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];

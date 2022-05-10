@@ -13,7 +13,6 @@ const VIEW_ID           = 5789206;                                          // ã
     data() {
       return {
         client: client,
-        aryMasterRecord: []
       }
     }
   });
@@ -27,11 +26,10 @@ const VIEW_ID           = 5789206;                                          // ã
 
     const appEl = document.getElementById('app');
     const vAppEl = document.createElement('v-app');
-    vAppEl.innerHTML = '<tc-header :client="client" :aryMasterRecord="aryMasterRecord"></tc-header>';
+    vAppEl.innerHTML = '<tc-header :client="client"></tc-header>';
     appEl.appendChild(vAppEl);
     
     vm.$mount('#app');
-    Vue.set(vm, 'aryMasterRecord', event.records);
     
     return event;
   });
