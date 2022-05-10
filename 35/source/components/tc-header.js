@@ -23,6 +23,7 @@ Vue.component('tc-header', {
 			aryDay: [ '月', '火', '水', '木', '金', '土', '日', '祝' ],
 			inputInfo: { '年代': [], '性別': [] },
 			userInfo: {},
+			aryRecord: [],
 			year: lxnY,
 			isAdmin: false,
 			isAdminOpen: false,
@@ -30,10 +31,36 @@ Vue.component('tc-header', {
 			ssect: '',
 			scost: 0,
 			officeInfoRecId: 0,
-			officeName: ''
+			officeName: '',
+			holdingTicket: 0,
+			isShowScount: true,
 		}
 	},
 	computed: {
+		aryColumn() {
+			let column = [];
+			column.push({ field: 'link', html: true });
+			if (this.isAdmin) column.push({ label: '表示名(Adminのみ)', field: '表示名.value' });
+
+			column.push(
+				{ label: 'スカウト状態',    field: 'スカウト状態.value' },
+				{ label: 'エントリー日',    field: 'エントリー日.value' },
+				{ label: '年齢',            field: '年齢.value', formatFn: (value => { return value + '歳'; }) },
+				{ label: '性別',            field: '性別.value' },
+				{ label: '市区町村',        field: '市名.value' },
+				{ label: '希望勤務地',      field: '勤務地.value' },
+				{ label: '希望契約形態',    field: '契約形態.value' },
+				{ label: '希望勤務開始日',  field: '開始日.value' },
+				{ label: '希望勤務終了日',  field: '終了日.value', },
+				{ label: '希望曜日',        field: '曜日.value', },
+				{ label: '希望職種',        field: '希望職種.value' },
+				{ label: '希望詳細職種',    field: '希望詳細職種.value' },
+				{ label: '希望業種',        field: '希望業種.value' },
+				{ label: '希望詳細業種',    field: '希望詳細業種.value' }
+			);
+			
+			return column;
+		},
 		aryYear() {
 			let years = [];
 			for (let i = minBirthYear; i <= maxBirthYear; i++) {
@@ -64,6 +91,15 @@ Vue.component('tc-header', {
 				});
 			}
 			return ary;
+		}
+	},
+	watch: {
+		isShowScout(newVal) {
+			if (newVal) {
+				this.aryRecord = this.aryMasterRecord;
+			} else {
+				this.aryRecord = this.aryMasterRecord.filter(record => record.スカウト状態.value == ' - ' );
+			}
 		}
 	},
 	async mounted() {
@@ -437,6 +473,105 @@ Vue.component('tc-header', {
 					</v-btn>
 				</div>
 			</v-sheet>
+
+			<!-- 配信設定 -->
+			<v-sheet
+				class="px-4 mb-3"
+			>
+				<div
+					class="d-flex"
+				>
+					<div
+						class="py-4"
+					>
+						<!-- 見出し -->
+						<div
+							class="d-flex align-items-center"
+						>
+							<h2
+								class="py-2 px-5 text-white bg-secondary fw-bold rounded-pill"
+							>
+								配信設定
+							</h2>
+							<p
+								class="m-0 ml-5"
+							>
+								チケット1枚につき{{ scost }}人をスカウトできます。
+							</p>
+						</div>
+
+						<div
+							class="d-flex pt-2 gap-5"
+						>
+							<!-- ターゲット人数 -->
+							<div>
+								<p
+									class="m-0 text-center"
+								>
+									ターゲット人数
+								</p>
+								<p
+									class="m-0 py-2 text-end fw-bold fs-3"
+								>
+									<span
+										id="target"
+									>
+										{{ aryRecord.length }}
+									</span>
+								</p>
+							</div>
+
+							<!-- 残チケット -->
+							<div>
+								<p
+									class="m-0"
+								>
+									残チケット
+								</p>
+								<p
+									class="m-0 py-2 fw-bold fs-3"
+								>
+									{{ holdingTicket }}枚
+								</p>
+							</div>
+						</div>
+
+						<!-- 配信対象情報等 -->
+						<div
+							class="pt-3"
+						>
+							<div>
+								<input
+									v-model="isShowScount"
+									id="isShowScount"
+									type="checkbox"
+								>
+								<label
+									for="isShowScount"
+								>
+									スカウトした内容を表示する
+								</label>
+							</div>
+							<p>エントリーの詳細情報を確認またはスカウトする場合は対象のエントリー者の行をクリックして詳細情報を開いてください。</p>
+						</div>
+					</div>
+				</div>
+			</v-sheet>
+
+			<vue-good-table
+				class="mb-5"
+				:columns="aryColumn"
+				:rows="aryRecord"
+				:pagination-options="{
+					enabled: true,
+					position: 'both',
+					perPage: 100,
+					nextLabel: '次のページへ',
+					prevLabel: '前のページへ',
+					ofLabel: '/',
+					rowsPerPageLabel: 'ページ当たりの行数'
+				}"
+			></vue-good-table>
 		</div>
 	`
 });
