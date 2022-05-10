@@ -3,7 +3,7 @@ Vue.component('tc-header', {
 	props: ['client', 'aryMasterRecord'],
 	data() {
 		return {
-			isAdminOpen: true,
+			isAdminOpen: false,
 			group: '',
 			ssect: '',
 			scost: 0,
