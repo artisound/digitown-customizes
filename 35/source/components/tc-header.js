@@ -11,6 +11,12 @@ Vue.component('tc-header', {
 			aryAge: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
 			aryCity: [],
 			aryGender: [ "男性", "女性" ],
+			// 勤務地一覧
+			aryWorkLocation: [ '高知県内全域', '高知市', '室戸市', '安芸市', '南国市', '土佐市', '須崎市', '宿毛市', '土佐清水市', '四万十市', '香南市', '香美市', '東洋町', '奈半利町', '田野町', '安田町', '北川村', '馬路村', '芸西村', '本山町', '大豊町', '土佐町', '大川村', 'いの町', '仁淀川町', '中土佐町', '佐川町', '越知町', '檮原町', '日高村', '津野町', '四万十町', '大月町', '三原村', '黒潮町' ],
+			// 契約形態一覧
+			aryEmploymentStatus: [ 'アルバイト・パート', '日雇い', '臨時（季節雇用）', '正社員', '契約社員', '派遣社員', '請負', '業務委託', 'その他' ],
+			// 曜日一覧
+			aryDay: [ '月', '火', '水', '木', '金', '土', '日', '祝' ],
 			inputInfo: { '年代': [], '性別': [] },
 			userInfo: {},
 			year: lxnY,
@@ -257,6 +263,84 @@ Vue.component('tc-header', {
 							outlined
 							hide-details="auto"
 						></v-select>
+					</v-form>
+				</div>
+
+				<!-- エントリー情報絞り込み -->
+				<div
+					class="border rounded mb-3 px-3 py-2"
+				>
+					<!-- 見出し -->
+					<h2
+						class="fw-borld m-0 mb-2"
+					>
+						エントリー情報で絞り込む
+					</h2>
+
+					<!-- 絞り込み条件 -->
+					<v-form
+						class="d-flex align-items-center gap-4"
+					>
+						<!-- 勤務地 -->
+						<v-select
+							v-model="inputInfo['勤務地']"
+							:items="aryWorkLocation"
+							label="勤務地"
+							multiple
+							outlined
+							hide-details="auto"
+						></v-select>
+
+						<!-- 契約形態 -->
+						<v-select
+							v-model="inputInfo['契約形態']"
+							:items="aryEmploymentStatus"
+							label="契約形態"
+							multiple
+							outlined
+							hide-details="auto"
+						></v-select>
+
+						<!--勤務開始日 -->
+						<v-text-field
+							v-model="inputInfo['開始日']"
+							label="開始日"
+							type="date"
+							outlined
+							hide-details="auto"
+						></v-text-field>
+
+						<!-- 曜日 -->
+						<v-select
+							v-model="inputInfo['曜日']"
+							:items="aryDay"
+							label="曜日"
+							multiple
+							outlined
+							hide-details="auto"
+						></v-select>
+					</v-form>
+
+					<v-form
+						class="d-flex align-items-center gap-4 mt-3"
+					>
+						<!-- 職種 -->
+						<v-text-field
+							v-model="inputInfo['希望職種']"
+							label="職種"
+							type="text"
+							outlined
+							hide-details="auto"
+						></v-text-field>
+
+						<!-- 詳細職種 -->
+						<v-text-field
+							v-model="inputInfo['希望詳細職種']"
+							label="詳細職種"
+							type="text"
+							outlined
+							hide-details="auto"
+						></v-text-field>
 					</v-form>
 				</div>
 			</v-sheet>
