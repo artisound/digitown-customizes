@@ -136,7 +136,7 @@ Vue.component('tc-header', {
         fields:			['レコード番号', '事業所名', '残高']
       }).then(resp => {
         if (!resp) return;
-        const userRecord			= resp[0];
+        const userRecord			= resp.records[0];
         this.holdingTicket		= Number(userRecord['残高']['value']);
         this.officeInfoRecId	= Number(userRecord['レコード番号']['value']);
       }),
@@ -159,7 +159,7 @@ Vue.component('tc-header', {
     ]);
 
     if(aryJobEntryInfo) {
-      this.aryRecord = aryJobEntryInfo;
+      this.aryRecord = aryJobEntryInfo.records;
       // LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
       this.aryRecord = this.aryRecord.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
       // 配列の要素をカンマ区切りの文字列に変更する
