@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 const VIEW_ID           = 5789206;                                          // アプリのビューID
 const APP_ID            = kintone.app.getId();                              // LINE友だち管理のアプリID
 const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
