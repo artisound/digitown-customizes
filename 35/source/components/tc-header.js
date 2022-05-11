@@ -126,7 +126,7 @@ Vue.component('tc-header', {
 		if(getParam('ui_query')) objUserInfoParam.condition += ' and ' + getParam('ui_query');
 
 
-    const [aryOfficeInfo, aryUserInfo, aryJobEntryInfo] = await new Promise.all([
+    const [aryOfficeInfo, aryUserInfo, aryJobEntryInfo] = await Promise.all([
       // ******************************************************************************************************************************
 		  // 事業所管理からレコードを取得する
       // ******************************************************************************************************************************
