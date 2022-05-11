@@ -93,6 +93,10 @@ Vue.component('tc-header', {
 			if (!newVal) {
 				this.aryRecord = this.aryRecord.filter(record => record.スカウト状態.value == ' - ' );
 			}
+		},
+		"inputInfo.郵便番号"(newVal) {
+			let zipcode = insertHyphenForZipcode(newVal);
+			this.inputInfo.郵便番号 = zipcode;
 		}
 	},
 	async mounted() {
@@ -477,7 +481,6 @@ Vue.component('tc-header', {
 							type="tel"
 							outlined
 							hide-details="auto"
-							@input="addHyphenToZipcode($event)"
 							style="max-width: 200px;"
 						></v-text-field>
 
