@@ -8,9 +8,9 @@
             "js": [
                 "https://js.cybozu.com/kintone-rest-api-client/2.0.2/KintoneRestAPIClient.min.js",
                 "https://timeconcier.jp/forline/tc-digital-town/_src/js/functions.js",
-                "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js",
+                "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.min.js",
                 "https://cdn.jsdelivr.net/npm/vue-good-table@2/dist/vue-good-table.js",
-                "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js",
+                "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js",
                 "https://js.cybozu.com/luxon/1.26.0/luxon.min.js",
                 "https://cdn.jsdelivr.net/npm/axios@0.x/dist/axios.min.js",
                 "35/source/components/tc-header.js",
