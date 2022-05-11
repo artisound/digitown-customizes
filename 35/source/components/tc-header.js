@@ -59,8 +59,8 @@ Vue.component('tc-header', {
 				{ label: '希望曜日',        field: '曜日.value', },
 				{ label: '希望職種',        field: '希望職種.value' },
 				{ label: '希望詳細職種',    field: '希望詳細職種.value' },
-				{ label: '希望業種',        field: '希望業種.value' },
-				{ label: '希望詳細業種',    field: '希望詳細業種.value' }
+				// { label: '希望業種',        field: '希望業種.value' },
+				// { label: '希望詳細業種',    field: '希望詳細業種.value' }
 			);
 
 			return column;
