@@ -1,23 +1,20 @@
-const ARY_DEFAULT_QUERY = [                                                 // レコード検索のデフォルトの条件
+// レコード検索のデフォルトの条件
+const ARY_DEFAULT_QUERY = [
   'LINEユーザーID not in ("")',
   '友達状態 in ("友だち")'
 ];
 
 const SHOW_LENGTH       = 5;
-const VIEW_ID           = 5700739;                                          // アプリのビューID
+const VIEW_ID           = 5700739;                      // アプリのビューID
 
-const LOGIN_USER        = kintone.getLoginUser().code;                   // kintoneのログインユーザー
-const appId_entry       = 35;                                               // ジョブエントリー
-const office_info       = 28                                                // 事業所管理
-const APP_ID            = kintone.app.getId();                              // LINE友だち管理のアプリID
+const LOGIN_USER        = kintone.getLoginUser().code;  // kintoneのログインユーザー
+const appId_entry       = 35;                           // ジョブエントリー
+const office_info       = 28                            // 事業所管理
 
-const lxn               = luxon.DateTime.fromJSDate(new Date());
-const lxnY              = lxn.toFormat('yyyy');
-const lxnM              = lxn.toFormat('MM');
-const lxnD              = lxn.toFormat('dd');
-const lxnYmd            = lxn.toFormat('yyyy-MM-dd');
-const lxnTime           = lxn.toFormat('HH:mm:ss');
-const lxnYmdHms         = lxn.toFormat('yyyy-MM-dd HH:mm:ss');
+const APP_ID            = kintone.app.getId();          // LINE友だち管理のアプリID
+const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
+const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
+
 const minBirthYear      = 10;
 const maxBirthYear      = 89;
 
@@ -46,22 +43,23 @@ Vue.component("tc-header", {
         年代: [],
         性別: [],
       },
-      jobEntryInfo: {},
-      year: lxnY,
-      isAdmin: false,
+
+      year       : dayjs().format('YYYY'),
+      isAdmin    : false,
       isAdminOpen: false,
-      deliveryCategory: "求人配信依頼",
+
       group: "",
       ssect: "",
       scost: 0,
-      sendTargetCount: 0,
-      useTicket: 0,
-      holdingTicket: 0,
-      officeInfoRecId: 0,
-      officeName: "",
-      // sendTargets         : [],
 
-      officeInfo: {},
+      sendTargetCount: 0,
+      useTicket      : 0,
+      holdingTicket  : 0,
+      officeInfoRecId: 0,
+      officeName     : "",
+
+      jobEntryInfo: {},
+      officeInfo  : {},
     }
   },
   computed: {
@@ -100,7 +98,7 @@ Vue.component("tc-header", {
         { label: "郵便番号", field: "郵便番号.value" },
         { label: "市区町村", field: "市名.value" }
       );
-      // if (this.deliveryCategory == '求人配信依頼') {
+
       if (this.ssect && this.ssect.indexOf("求人") != -1) {
         column.push(
           { label: "勤務地", field: "勤務地.value" },
@@ -152,7 +150,7 @@ Vue.component("tc-header", {
       console.log(this.aryRecord.length);
       for (let i = 0; i <= maxTargetLength; i++) {
         const targetCount = i * this.scost;
-        console.log(targetCount);
+        // console.log(targetCount);
         // 1度で配信できるのは1000人まで
         if (targetCount > 0 && targetCount >= this.aryRecord.length) {
           targets.push({ text: "全員", value: this.aryRecord.length });
@@ -165,78 +163,105 @@ Vue.component("tc-header", {
       return targets;
     },
   },
-  async mounted() {
+  mounted: async function() {
+    // kintone Rest API Client
     const client = this.client;
-    // カスタマイズ一覧の選択等を非表示にする
+
+    /** *******************************************************
+     * カスタマイズ一覧の選択等を非表示にする
+     ******************************************************* */
     const el = document.getElementsByClassName("contents-actionmenu-gaia")[0];
     el.style.display = "none";
 
+    /** *******************************************************
+     * 各クエリパラメータを格納
+     ******************************************************* */
     this.ssect = getParam("ssect");
     this.scost = Number(getParam("scost"));
     this.group = getParam("officeGroup");
 
-    // ログインユーザーの組織取得
+    /** *******************************************************
+     * ログインユーザーの組織取得
+     ******************************************************* */
     kintone.api(
       kintone.api.url("/v1/user/groups", true),
       "GET",
       { code: LOGIN_USER },
       (resp) => {
+        console.group("Current User's Group");
+
+        // 全組織(グループ)を取得
         const groups = resp.groups;
-        console.log(groups);
-        if (!groups || !groups.length) return;
+        console.log('Groups', groups);
 
-        // this.group = groups[0]['name'];
-
-        const results = groups.filter((group) => {
-          return group["code"] == "Administrators";
-        });
-        console.log(results);
+        // ログインしているユーザーに"Administrators"組織があればそれを抽出
+        const grpAdmin = groups.find(group => group.code == "Administrators");
+        console.log('AdminGroup', grpAdmin);
 
         // 「管理者のみ開く」を有効にする
-        if (results.length) this.isAdmin = true;
-        console.log(this.isAdmin);
+        if (grpAdmin) this.isAdmin = true;
+        console.log('isAdmin', this.isAdmin);
+
+        console.groupEnd("Current User's Group");
       }
     );
 
-    const officeInfoParam = {
-      app: office_info,
-      condition: `有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
-      fields: ["レコード番号", "事業所名", "残高"],
-    };
 
-    const aryOfficeInfo = await client.record.getAllRecords(officeInfoParam);
-    console.log(aryOfficeInfo);
-    if (!aryOfficeInfo) return;
+    /** *******************************************************
+     * 一気にデータ取得
+     ******************************************************* */
+    const [aryCity, aryOfficeInfo, aryJobEntryInfo] = await Promise.all([
+      // ******************************************************************************************************************************
+		  // 市町村情報をMySQLから取得
+      // ******************************************************************************************************************************
+      _connectMySQLaxios({
+        db: { name: "tc2_digitown" },
+        action: "get",
+        table: "dt1_city_master",
+      }),
 
-    this.aryCity = await _connectMySQLaxios({
-      db: { name: "tc2_digitown" },
-      action: "get",
-      table: "dt1_city_master",
-    });
+      // ******************************************************************************************************************************
+		  // 事業所管理からレコードを取得する
+      // ******************************************************************************************************************************
+      client.record.getAllRecords({
+        app: office_info,
+        condition: `有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
+        fields: ["レコード番号", "事業所名", "残高"],
+      }).then(resp => { return resp; }).catch(console.error),
+
+      // ******************************************************************************************************************************
+		  // ジョブエントリーからレコードを取得する
+      // ******************************************************************************************************************************
+      client.record.getAllRecords({
+        app  : APP_ID,
+        condition: getParam("query"),
+      }).then(resp => { return resp; }).catch(console.error),
+    ]);
+
+    // 市町村情報を格納
+    this.aryCity = aryCity;
+
 
     // 絞り込み条件をフォームに反映させる
     this.paramsToForm(getParam("query"), this.inputInfo);
 
-    const userRecord = aryOfficeInfo[0];
-    this.holdingTicket = Number(userRecord["残高"]["value"]);
-    this.officeInfoRecId = Number(userRecord["レコード番号"]["value"]);
-    this.officeName = userRecord["事業所名"]["value"];
 
-    const body = {
-      app: APP_ID,
-      query: `${getParam("query")} limit 500 offset 0`,
-    };
+    // 事業所レコード情報を格納
+    if(!aryOfficeInfo && !aryOfficeInfo.length) return;
+    const userRecord     = aryOfficeInfo[0];
+    this.officeName      = userRecord["事業所名"].value;
+    this.holdingTicket   = Number(userRecord["残高"].value);
+    this.officeInfoRecId = Number(userRecord["レコード番号"].value);
 
-    kintone.api(
-      kintone.api.url("/k/v1/records", true),
-      "GET",
-      body,
-      async (resp) => {
-        let aryRecord = resp.records;
-        if (this.ssect.indexOf("求人") == -1) {
-          this.aryRecord = resp.records;
-          return;
-        }
+
+    // ジョブエントリー情報
+    console.log(aryJobEntryInfo)
+    if(aryJobEntryInfo && aryJobEntryInfo.length) {
+      if (this.ssect.includes("求人")) {
+        this.aryRecord = aryJobEntryInfo;
+        return;
+      } else {
+        let aryRecord = aryJobEntryInfo;
 
         // ジョブエントリーアプリからレコードを取得する
         const objParam = {
@@ -245,14 +270,14 @@ Vue.component("tc-header", {
           fields: [ "レコード番号", "LINEユーザーID", "勤務地", "契約形態", "開始日", "曜日" ],
         };
 
+        // ジョブエントリー用クエリパラメータ確認
         const je_query = getParam("je_query");
-        if (je_query) objParam.query = objParam.query + " and " + je_query;
+        if (je_query) objParam.condition += " and " + je_query;
+
 
         const aryJobEntry = await client.record.getAllRecords(objParam);
-        aryRecord = aryRecord.filter((record) => {
-          return aryJobEntry.find(
-            (v) => v.LINEユーザーID.value == record.LINEユーザーID.value
-          );
+        aryRecord = aryRecord.filter(record => {
+          return aryJobEntry.find(v => v.LINEユーザーID.value == record.LINEユーザーID.value);
         });
 
         this.aryRecord = aryRecord.map((record) => {
@@ -269,77 +294,101 @@ Vue.component("tc-header", {
           return record;
         });
 
+        // 絞り込み条件をフォームに反映させる
         this.paramsToForm(je_query, this.jobEntryInfo);
-      },
-      (err) => {
-        console.log(err);
       }
-    );
+    }
   },
   methods: {
-    /** ---------------------------------------------------------------------
-       * 検索ボタンが押された時の処理
-       --------------------------------------------------------------------- */
+    /** *********************************************************************
+     * 検索ボタンが押された時の処理
+     ********************************************************************* */
     onSearch() {
+      // スカウトステータス更新
       let isScout = false;
-      if (this.ssect.indexOf("求人") != -1) {
-        isScout = true;
-        if (this.ssect.indexOf("スカウト") != -1) {
-          isScout = false;
-        }
+      if (this.ssect.includes("求人")) {
+        isScout = this.ssect.includes("スカウト") ? false : true;
       }
+
+      // 入力値をURIエンコード
       const query = encodeURI(_getQueryText(this.inputInfo, isScout));
 
-      let url = `${APP_URL}?view=${VIEW_ID}&query=${query}`;
+      // クエリパラメータ生成①
+      let url = APP_URL;
+      const aryParam = [];
       if (this.ssect && this.scost && this.group) {
-        url += `&ssect=${this.ssect}&scost=${this.scost}&officeGroup=${this.group}`;
+        const addParam = {
+          view : VIEW_ID,
+          query: query,
+          ssect: this.ssect,
+          scost: this.scost,
+          officeGroup: this.group,
+        };
+
+        for (let param in addParam) aryParam.push(`${param}=${addParam[param]}`);
       }
 
-      let je_query = "";
-      if (isScout) {
-        je_query = Object.keys(this.jobEntryInfo).length
-          ? encodeURI(this.getJobEntryQuery(this.jobEntryInfo))
-          : "";
+      // クエリパラメータ生成②
+      if (isScout && Object.keys(this.jobEntryInfo).length) {
+        aryParam.push( 'je_query=' + encodeURI(this.getJobEntryQuery(this.jobEntryInfo)) );
       }
 
-      window.location.href = je_query ? `${url}&je_query=${je_query}` : url;
+      // ページ遷移
+      window.location.href = url + '?' + aryParam.join('&');
     },
+
+    /** *********************************************************************
+     * 入力値をクリア
+     ********************************************************************* */
     onClear() {
       this.inputInfo = { 年代: [], 性別: [] };
       this.jobEntryInfo = {};
       this.onSearch();
     },
+
+    /** *********************************************************************
+     * 管理者のみ表示する要素を制御
+     ********************************************************************* */
     onAdmin() {
       const el = document.getElementsByClassName("contents-actionmenu-gaia")[0];
       el.style.display = el.style.display == "block" ? "none" : "block";
       this.isAdminOpen = el.style.display == "block";
     },
-    changeSendTargets() {
-      this.useTicket = Math.ceil(this.targetCount / this.scost);
-    },
-    addHyphenToZipcode(val) {
-      // -（ハイフン）を自動で入れる
-      let zipcode = insertHyphenForZipcode(val);
+
+    /** *********************************************************************
+     * 郵便番号にハイフンを自動で入れる
+     * - 8文字以上入力できないように制御
+     * @param {Number} zipCode - 郵便番号
+     ********************************************************************* */
+    addHyphenToZipcode(zipCode) {
+      let zipcode = insertHyphenForZipcode(zipCode);
+      if(zipcode.length > 8) zipcode.slice( 0, -1 )
       this.inputInfo["郵便番号"] = zipcode;
-      console.log(`${val} -> ${zipcode}`);
-      console.log(this.inputInfo["郵便番号"]);
     },
+
+    /** *********************************************************************
+     * 管理者のみ表示する要素を制御
+     ********************************************************************* */
     getJobEntryQuery(obj) {
-      let aryQuery = [];
+      console.group('getJobEntryQuery()');
+      const aryQuery = [];
       for (const key in obj) {
         const newValue = obj[key];
+
         if (Array.isArray(newValue)) {
+          // ------------------------
           // 配列
-          if (!newValue) continue;
-          if (newValue.length < 1) continue;
-          let objQuery = {
-            [key]: [],
-          };
+          if (!newValue || newValue.length < 1) continue;
+          const objQuery = {};
           for (const i in newValue) {
+            if( !objQuery[key] ) objQuery[key] = [];
             objQuery[key].push(`"${newValue[i]}"`);
           }
+
+          console.log('isArray', objQuery);
           aryQuery.push(`${key} in (${objQuery[key].join(", ")})`);
         } else {
+          // ------------------------
           // 文字列
           if (!newValue) continue;
           if (newValue.length < 1) continue;
@@ -353,63 +402,70 @@ Vue.component("tc-header", {
           }
         }
       }
+      console.log('Queries', aryQuery);
 
+      console.groupEnd('getJobEntryQuery()');
       return aryQuery.join(" and ");
     },
+
+    /** *********************************************************************
+     * LINEメッセージ送信
+     * - #LINEMSG要素をクリック
+     ********************************************************************* */
     sendLINE() {
       if (!this.targetCount) return;
       document.getElementById("LINEMSG").click();
     },
-    getSepaText(text) {
-      let sepaText = "";
-      if (text.indexOf(" >= ") >= 0) {
-        sepaText = " >= ";
-      } else if (text.indexOf(" = ") >= 0) {
-        sepaText = " = ";
-      } else if (text.indexOf(" in ") >= 0) {
-        sepaText = " in ";
-      } else if (text.indexOf(" like ") >= 0) {
-        sepaText = " like ";
-      }
 
-      return sepaText;
+    /** *********************************************************************
+     * 絞り込み条件文字列から比較演算子を出力
+     * @param {String} strQuery - 絞り込み条件文字列
+     ********************************************************************* */
+    getSepaText(strQuery) {
+      const seps = [ ' >= ', ' != ', '=', ' = ', ' in ', ' like ' ];
+      for (let sep of seps) if(strQuery.includes(sep)) return sep;
     },
 
+    /** *********************************************************************
+     * 絞り込み条件をフォームに反映させる
+     * @param {String} params    - 絞り込み条件文字列
+     * @param {Object} inputForm - 反映させる対象のdataプロパティ
+     ********************************************************************* */
     paramsToForm(params, inputForm) {
       if (!params) return;
 
-      const sepaParams = params.split(" and ");
-      sepaParams.forEach((param) => {
-        if (
-          param.indexOf("LINEユーザーID") >= 0 ||
-          param.indexOf("友達状態") >= 0 ||
-          param.indexOf("求人配信") >= 0
-        ) {
-          return;
-        }
+      let i = 0;
+      console.group('paramsToForm');
+      for (const param of params.split(" and ")) {
+        if ( param.includes("LINEユーザーID") || param.includes("友達状態") || param.includes("求人配信") ) continue;
+        console.group('paramsToForm'+i);
 
         const sepaText = this.getSepaText(param);
         const splits = param.split(sepaText);
-        let value = splits[1];
-        value = value.replaceAll('"', "");
+        let value = splits[1].replace(/\"/g, "");
 
         switch (sepaText) {
           case "=":
-            if (Number(value)) {
-              value = Number(value);
-            }
+          case " = ":
+            if (Number(value)) value = Number(value);
             break;
           case " in ":
-            value = value.replace("(", "");
-            value = value.replace(")", "");
-            value = value.split(", ");
+            // ()内の文字列を抽出し、カンマで分割
+            value = value.match(/\((.+)\)/)[1].split(", ");
             break;
           default:
             break;
         }
 
+        console.log('condition', param);
+        console.log('separator', sepaText);
+        console.log('value', value);
+
         inputForm[splits[0]] = value;
-      });
+        console.groupEnd('paramsToForm'+i);
+        i++;
+      };
+      console.groupEnd('paramsToForm');
 
       return inputForm;
     },
@@ -688,7 +744,7 @@ Vue.component("tc-header", {
                 :items="sendTargets"
                 outlined
                 hide-details="auto"
-                @change="changeSendTargets()"
+                @change="useTicket = Math.ceil(targetCount / scost)"
                 style="width: 150px; overflow: auto;"
               ></v-select>
             </div>
@@ -795,7 +851,8 @@ function isGraphPage(graphId) {
 
 /** ---------------------------------------------------------------------
  * kintoneで検索するためのクエリを作成する関数
- * @param {object} obj selectedオブジェクト
+ * @param {Object} obj      - selectedオブジェクト
+ * @param {Boolean} isScout - true | false
  --------------------------------------------------------------------- */
 function _getQueryText(obj, isScout) {
   let aryQuery = [
