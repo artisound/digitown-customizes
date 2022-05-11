@@ -37,7 +37,10 @@ Vue.component("tc-header", {
       aryDay: ["月", "火", "水", "木", "金", "土", "日", "祝"],
       // 市区町村一覧
       aryCity: [],
-      inputInfo: {
+
+      jobEntryInfo: {},
+      officeInfo  : {},
+      inputInfo   : {
         // 検索で条件に指定された項目一覧
         // 年代と性別は配列を用意しておかないとチェックボックスの結果を受け取れない
         年代: [],
@@ -57,9 +60,6 @@ Vue.component("tc-header", {
       holdingTicket  : 0,
       officeInfoRecId: 0,
       officeName     : "",
-
-      jobEntryInfo: {},
-      officeInfo  : {},
     }
   },
   computed: {
@@ -253,6 +253,7 @@ Vue.component("tc-header", {
     this.holdingTicket   = Number(userRecord["残高"].value);
     this.officeInfoRecId = Number(userRecord["レコード番号"].value);
 
+    console.log(this.inputInfo);
 
     // ジョブエントリー情報
     console.log(aryJobEntryInfo)
@@ -314,7 +315,6 @@ Vue.component("tc-header", {
       const query = encodeURI(_getQueryText(this.inputInfo, isScout));
 
       // クエリパラメータ生成①
-      let url = APP_URL;
       const aryParam = [];
       if (this.ssect && this.scost && this.group) {
         const addParam = {
@@ -334,7 +334,7 @@ Vue.component("tc-header", {
       }
 
       // ページ遷移
-      window.location.href = url + '?' + aryParam.join('&');
+      window.location.href = APP_URL + '?' + aryParam.join('&');
     },
 
     /** *********************************************************************
@@ -353,17 +353,6 @@ Vue.component("tc-header", {
       const el = document.getElementsByClassName("contents-actionmenu-gaia")[0];
       el.style.display = el.style.display == "block" ? "none" : "block";
       this.isAdminOpen = el.style.display == "block";
-    },
-
-    /** *********************************************************************
-     * 郵便番号にハイフンを自動で入れる
-     * - 8文字以上入力できないように制御
-     * @param {Number} zipCode - 郵便番号
-     ********************************************************************* */
-    addHyphenToZipcode(zipCode) {
-      let zipcode = insertHyphenForZipcode(zipCode);
-      if(zipcode.length > 8) zipcode.slice( 0, -1 )
-      this.inputInfo["郵便番号"] = zipcode;
     },
 
     /** *********************************************************************
@@ -427,6 +416,15 @@ Vue.component("tc-header", {
     },
 
     /** *********************************************************************
+     * 絞り込み条件文字列から比較演算子を出力
+     * @param {String} value - 絞り込み条件文字列
+     ********************************************************************* */
+    zipcodeAddHypen(value) {
+      const zip = zipcodeAutoHyphen(value);
+      this.$set(this.inputInfo, '郵便番号', zip);
+    },
+
+    /** *********************************************************************
      * 絞り込み条件をフォームに反映させる
      * @param {String} params    - 絞り込み条件文字列
      * @param {Object} inputForm - 反映させる対象のdataプロパティ
@@ -475,6 +473,7 @@ Vue.component("tc-header", {
     <!-- 管理者のみ見られる情報 -->
     <tc-param
       v-show="isAdminOpen"
+      :is-admin="isAdmin"
       :group="group"
       :ssect="ssect"
       :scost="scost"
@@ -615,9 +614,9 @@ Vue.component("tc-header", {
             label="郵便番号"
             type="tel"
             v-model="inputInfo['郵便番号']"
+            @change="zipcodeAddHypen($event)"
             outlined
             hide-details="auto"
-            @input="addHyphenToZipcode($event)"
             style="max-width: 200px;"
           ></v-text-field>
 

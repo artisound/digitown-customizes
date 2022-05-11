@@ -11,13 +11,13 @@
                 "https://cdn.jsdelivr.net/npm/vue-good-table@2/dist/vue-good-table.min.js",
                 "https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js",
                 "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
+                "functions.js",
                 "45/source/components/tc-header.js",
                 "45/source/components/tc-param.js",
                 "45/source/js/kintone-ui-component.min.js",
                 "45/source/js/encoding.min.js",
                 "45/source/js/encoding.js",
                 "45/source/js/tab(2).js",
-                "functions.js",
                 "45/dist/45.min.js"
             ],
             "css": [
