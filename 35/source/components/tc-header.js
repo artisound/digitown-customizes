@@ -257,20 +257,6 @@ Vue.component('tc-header', {
 		getSepaText(text) {
       const seps = [ ' >= ', ' != ', ' = ', ' in ', ' like ' ];
       for (let sep of seps) if(text.includes(sep)) return sep;
-
-			// let sepaText = '';
-			// if (text.includes(' >= ')) {
-			// 	sepaText = ' >= ';
-			// } else if (text.includes(' != ')) {
-			// 	sepaText = ' != ';
-			// } else if (text.includes(' = ')) {
-			// 	sepaText = ' = ';
-			// } else if (text.includes(' in ')) {
-			// 	sepaText = ' in ';
-			// } else if (text.includes(' like ')) {
-			// 	sepaText = ' like ';
-			// }
-			// return sepaText;
 		},
 		paramsToForm(params, inputData) {
 			if (!params) return;
