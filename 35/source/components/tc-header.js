@@ -211,7 +211,8 @@ Vue.component('tc-header', {
 		--------------------------------------------------------------------- */
 		getQueryText(obj) {
 			let aryQuery = [
-				'LINEユーザーID != ""'
+				'LINEユーザーID != ""',
+				'年齢 >= 16'
 			];
 
 			for (const KEY in obj) {
@@ -241,7 +242,8 @@ Vue.component('tc-header', {
 							aryQuery.push(`${KEY} like "${NEW_VALUE}"`);
 							break;
 						default:
-							aryQuery.push(`${KEY} = "${NEW_VALUE}"`);
+							const value = Number(NEW_VALUE) ? Number(NEW_VALUE) : `"${NEW_VALUE}"`;
+							aryQuery.push(`${KEY} = ${value}`);
 							break;
 					}
 				}
@@ -269,7 +271,7 @@ Vue.component('tc-header', {
 		paramsToForm(params, inputData) {
 			if (!params) return;
 			const sepaParams = params.split(' and ');
-			sepaParams.forEach(param => {
+			for (const param of sepaParams) {
 				const sepaText = this.getSepaText(param);
 				const splits = param.split(sepaText);
 				let value = splits[1];
@@ -287,11 +289,11 @@ Vue.component('tc-header', {
 						value = value.split(', ');
 						break;
 					default:
-						break;
+						continue;
 				}
 
 				inputData[splits[0]] = value;
-			});
+			}
 		},
 		onAdmin() {
 			const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];
