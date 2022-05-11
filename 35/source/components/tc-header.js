@@ -503,14 +503,7 @@ Vue.component('tc-header', {
 						<!-- 誕生年 -->
 						<v-select
 							v-model="inputInfo['誕生年']"
-							:items="{
-                let birthYears = [];
-                for (let i = ${minBirthYear}; i <= ${maxBirthYear}; i++) {
-                  const year = this.year - i;
-                  birthYears.push({ text: year + '年', value: year });
-                }
-                return birthYears;
-              }"
+							:items="aryBirthYear"
 							item-text="text"
 							item-value="value"
 							label="誕生年"
