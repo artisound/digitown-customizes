@@ -26,7 +26,7 @@ const VIEW_ID           = 5789206;                                          // ã
 
     const appEl = document.getElementById('app');
     const vAppEl = document.createElement('v-app');
-    vAppEl.innerHTML = '<tc-header :client="client"></tc-header>';
+    vAppEl.innerHTML = '<tc-search :client="client"></tc-search>';
     appEl.appendChild(vAppEl);
     
     vm.$mount('#app');

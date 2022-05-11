@@ -11,8 +11,8 @@ const minBirthYear      = 10;
 const maxBirthYear      = 89;
 const lxn               = luxon.DateTime.fromJSDate(new Date());
 const lxnY              = lxn.toFormat('yyyy');
-Vue.component('tc-header', {
-	name: 'tc-header',
+Vue.component('tc-search', {
+	name: 'tcSearch',
 	props: ['client'],
 	data() {
 		return {
@@ -289,11 +289,6 @@ Vue.component('tc-header', {
 				inputData[splits[0]] = value;
 			}
 		},
-		onAdmin() {
-			const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];
-			el.style.display = el.style.display == 'block' ? 'none' : 'block';
-			this.isAdminOpen = el.style.display == 'block';
-		},
 		onClear() {
 			this.inputInfo  = { '年代': [], '性別': [] };
 			this.userInfo   = {};
@@ -318,35 +313,14 @@ Vue.component('tc-header', {
 	},
 	template: `
 		<div>
-			<tc-param
-				v-show="isAdminOpen"
+			<tc-header
 				:group="group"
 				:ssect="ssect"
 				:scost="scost"
 				:office-info-rec-id="officeInfoRecId"
 				:office-name="officeName"
-			>
-			</tc-param>
-
-			<!-- ヘッダー -->
-			<div
-				class="px-3 mb-3 d-flex justify-content-between align-items-center"
-				style="background-color: #df5550;"
-			>
-				<h1
-					class="my-1 text-white fw-normal"
-					style="background-color: #df5550;"
-				>
-					Jobエントリー
-				</h1>
-				<v-btn
-					v-if="isAdmin"
-					large
-					@click="onAdmin()"
-				>
-					管理者のみ開く
-				</v-btn>
-			</div>
+				:is-admin="isAdmin"
+			></tc-header>
 
 			<!-- 絞り込み -->
 			<v-sheet
