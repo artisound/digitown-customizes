@@ -61,16 +61,13 @@ Vue.component('tc-header', {
 				{ label: '希望業種',        field: '希望業種.value' },
 				{ label: '希望詳細業種',    field: '希望詳細業種.value' }
 			);
-			
+
 			return column;
 		},
 		aryYear() {
 			let years = [];
 			for (let i = minBirthYear; i <= maxBirthYear; i++) {
-				years.push({
-					text: i + '歳',
-					value: i
-				});;
+				years.push({ text: i + '歳', value: i });
 			}
 			return years;
 		},
@@ -78,20 +75,14 @@ Vue.component('tc-header', {
 			let birthYears = [];
 			for (let i = minBirthYear; i <= maxBirthYear; i++) {
 				const year = this.year - i;
-				birthYears.push({
-					text: year + '年',
-					value: year
-				});
+				birthYears.push({ text: year + '年', value: year });
 			}
 			return birthYears;
 		},
 		aryMonth() {
 			let ary = [];
 			for (let index = 1; index <= 12; index++) {
-				ary.push({
-					text: index + '月',
-					value: index
-				});
+				ary.push({ text: index + '月', value: index });
 			}
 			return ary;
 		}
@@ -124,92 +115,152 @@ Vue.component('tc-header', {
 			if (results.length) this.isAdmin = true;
 		});
 
-		const officeInfoParam = {
-			app:				office_info,
-			condition:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
-			fields:			['レコード番号', '事業所名', '残高']
-		};
-
-		const aryOfficeInfo = await client.record.getAllRecords(officeInfoParam);
-		if (!aryOfficeInfo) return;
-
-		
-		const userRecord			= aryOfficeInfo[0];
-		this.holdingTicket		= Number(userRecord['残高']['value']);
-		this.officeInfoRecId	= Number(userRecord['レコード番号']['value']);
-
-		
+    // --------------------------------------------------------
+    // LINE友だち管理からレコード取得用パラメータ
 		const objUserInfoParam = {
 			app:    appId_user,
 			condition:  'LINEユーザーID != "" and 友達状態 in ("友だち") and 年齢_年_ >= 16',
 			fields: ['レコード番号', 'LINEユーザーID', '表示名', '誕生年', '誕生月']
 		};
+		if(getParam('ui_query')) objUserInfoParam.condition += ' and ' + getParam('ui_query');
 
-		if(getParam('ui_query')) objUserInfoParam.query = objUserInfoParam.query + ' and ' + getParam('ui_query');
 
-		// LINE友だち管理からレコードを取得する
-		const aryUserInfo = await client.record.getAllRecords(objUserInfoParam);
+    const [aryOfficeInfo, aryUserInfo, aryJobEntryInfo] = await new Promise.all([
+      // ******************************************************************************************************************************
+		  // 事業所管理からレコードを取得する
+      // ******************************************************************************************************************************
+      client.record.getRecords({
+        app:				office_info,
+        query:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
+        fields:			['レコード番号', '事業所名', '残高']
+      }).then(resp => {
+        if (!resp) return;
+        const userRecord			= resp[0];
+        this.holdingTicket		= Number(userRecord['残高']['value']);
+        this.officeInfoRecId	= Number(userRecord['レコード番号']['value']);
+      }),
 
-		const body = {
-			app: APP_ID,
-			query: `${getParam("query")} limit 500 offset 0`
-		};
+      // ******************************************************************************************************************************
+		  // LINE友だち管理からレコードを取得する
+      // ******************************************************************************************************************************
+      client.record.getAllRecords(objUserInfoParam),
 
-		kintone.api(
-			kintone.api.url('/k/v1/records', true),
-			'GET',
-			body,
-			async resp => {
-				this.aryRecord = resp.records;
-				// LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
-				this.aryRecord = this.aryRecord.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
-				// 配列の要素をカンマ区切りの文字列に変更する
-				this.aryRecord = this.aryRecord.map(record => {
-					record.勤務地   = { value: record.勤務地.value.join(', ') };
-					record.契約形態 = { value: record.契約形態.value.join(', ') };
-					record.曜日     = { value: record.曜日.value.join(', ') };
+      // ******************************************************************************************************************************
+		  // ジョブエントリーからレコードを取得する
+      // ******************************************************************************************************************************
+      client.record.getRecords({
+        app: APP_ID,
+        query: `${getParam("query")}`
+        // query: `${getParam("query")} limit 500 offset 0`
+      }).then(async resp => {
+        return resp;
+      }).catch(console.error),
+    ]);
 
-					return record;
-				});
+    if(aryJobEntryInfo) {
+      this.aryRecord = aryJobEntryInfo;
+      // LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
+      this.aryRecord = this.aryRecord.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
+      // 配列の要素をカンマ区切りの文字列に変更する
+      this.aryRecord = this.aryRecord.map(record => {
+        record.勤務地   = { value: record.勤務地.value.join(', ') };
+        record.契約形態 = { value: record.契約形態.value.join(', ') };
+        record.曜日     = { value: record.曜日.value.join(', ') };
 
-				this.aryRecord = this.aryRecord.map(record => {
-					const rec = aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value);
-					return rec ? Object.assign(rec, record) : record;
-				});
+        return record;
+      });
 
-				// スカウト情報を取得する
-				const objScoutParam = {
-					app:    appId_scout,
-					condition:  'LINEユーザーID != ""',
-					fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
-				};
+      this.aryRecord = this.aryRecord.map(record => {
+        const rec = aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value);
+        return rec ? Object.assign(rec, record) : record;
+      });
 
-				const aryScout = await client.record.getAllRecords(objScoutParam);
-				this.aryRecord = this.aryRecord.map(record => {
-					const recs = aryScout.filter(r => r.LINEユーザーID.value == record.LINEユーザーID.value );
+      // スカウト情報を取得する
+      const objScoutParam = {
+        app:    appId_scout,
+        condition:  'LINEユーザーID != ""',
+        fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
+      };
 
-					record.スカウト状態 = recs.length ? { value: recs[recs.length - 1].スカウト状態.value } : { value: ' - ' };
-					return record;
-				});
+      const aryScout = await client.record.getAllRecords(objScoutParam);
+      this.aryRecord = this.aryRecord.map(record => {
+        const recs = aryScout.filter(r => r.LINEユーザーID.value == record.LINEユーザーID.value );
 
-				this.aryRecord.map(record => {
-					return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
-				});
+        record.スカウト状態 = recs.length ? { value: recs[recs.length - 1].スカウト状態.value } : { value: ' - ' };
+        return record;
+      });
 
-				this.aryCity = await _connectMySQLaxios({
-					db: { name: 'tc2_digitown' },
-					action: 'get',
-					table: 'dt1_city_master'
-				});
+      this.aryRecord.map(record => {
+        return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
+      });
 
-				// // 絞り込み条件をフォームに反映させる
-				this.paramsToForm(getParam('query'), this.inputInfo);
-				this.paramsToForm(getParam('ui_query'), this.userInfo);
-			},
-			err => {
-				console.log(err);
-			}
-		);
+      this.aryCity = await _connectMySQLaxios({
+        db: { name: 'tc2_digitown' },
+        action: 'get',
+        table: 'dt1_city_master'
+      });
+
+      // 絞り込み条件をフォームに反映させる
+      this.paramsToForm(getParam('query'), this.inputInfo);
+      this.paramsToForm(getParam('ui_query'), this.userInfo);
+    }
+
+
+		// kintone.api(
+		// 	kintone.api.url('/k/v1/records', true),
+		// 	'GET',
+		// 	body,
+		// 	async resp => {
+		// 		this.aryRecord = resp.records;
+		// 		// LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
+		// 		this.aryRecord = this.aryRecord.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
+		// 		// 配列の要素をカンマ区切りの文字列に変更する
+		// 		this.aryRecord = this.aryRecord.map(record => {
+		// 			record.勤務地   = { value: record.勤務地.value.join(', ') };
+		// 			record.契約形態 = { value: record.契約形態.value.join(', ') };
+		// 			record.曜日     = { value: record.曜日.value.join(', ') };
+
+		// 			return record;
+		// 		});
+
+		// 		this.aryRecord = this.aryRecord.map(record => {
+		// 			const rec = aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value);
+		// 			return rec ? Object.assign(rec, record) : record;
+		// 		});
+
+		// 		// スカウト情報を取得する
+		// 		const objScoutParam = {
+		// 			app:    appId_scout,
+		// 			condition:  'LINEユーザーID != ""',
+		// 			fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
+		// 		};
+
+		// 		const aryScout = await client.record.getAllRecords(objScoutParam);
+		// 		this.aryRecord = this.aryRecord.map(record => {
+		// 			const recs = aryScout.filter(r => r.LINEユーザーID.value == record.LINEユーザーID.value );
+
+		// 			record.スカウト状態 = recs.length ? { value: recs[recs.length - 1].スカウト状態.value } : { value: ' - ' };
+		// 			return record;
+		// 		});
+
+		// 		this.aryRecord.map(record => {
+		// 			return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
+		// 		});
+
+		// 		this.aryCity = await _connectMySQLaxios({
+		// 			db: { name: 'tc2_digitown' },
+		// 			action: 'get',
+		// 			table: 'dt1_city_master'
+		// 		});
+
+		// 		// // 絞り込み条件をフォームに反映させる
+		// 		this.paramsToForm(getParam('query'), this.inputInfo);
+		// 		this.paramsToForm(getParam('ui_query'), this.userInfo);
+		// 	},
+		// 	err => {
+		// 		console.log(err);
+		// 	}
+		// );
 	},
 	methods: {
 		/** ---------------------------------------------------------------------
@@ -256,19 +307,22 @@ Vue.component('tc-header', {
 			return aryQuery.join(' and ');
 		},
 		getSepaText(text) {
-			let sepaText = '';
-			if (text.indexOf(' >= ') >= 0) {
-				sepaText = ' >= ';
-			} else if (text.indexOf(' != ') >= 0) {
-				sepaText = ' != ';
-			} else if (text.indexOf(' = ') >= 0) {
-				sepaText = ' = ';
-			} else if (text.indexOf(' in ') >= 0) {
-				sepaText = ' in ';
-			} else if (text.indexOf(' like ') >= 0) {
-				sepaText = ' like ';
-			}
-			return sepaText;
+      const seps = [ ' >= ', ' != ', ' = ', ' in ', ' like ' ];
+      for (let sep of seps) if(text.includes(sep)) return sep;
+
+			// let sepaText = '';
+			// if (text.includes(' >= ')) {
+			// 	sepaText = ' >= ';
+			// } else if (text.includes(' != ')) {
+			// 	sepaText = ' != ';
+			// } else if (text.includes(' = ')) {
+			// 	sepaText = ' = ';
+			// } else if (text.includes(' in ')) {
+			// 	sepaText = ' in ';
+			// } else if (text.includes(' like ')) {
+			// 	sepaText = ' like ';
+			// }
+			// return sepaText;
 		},
 		paramsToForm(params, inputData) {
 			if (!params) return;
@@ -449,7 +503,14 @@ Vue.component('tc-header', {
 						<!-- 誕生年 -->
 						<v-select
 							v-model="inputInfo['誕生年']"
-							:items="aryBirthYear"
+							:items="{
+                let birthYears = [];
+                for (let i = ${minBirthYear}; i <= ${maxBirthYear}; i++) {
+                  const year = this.year - i;
+                  birthYears.push({ text: year + '年', value: year });
+                }
+                return birthYears;
+              }"
 							item-text="text"
 							item-value="value"
 							label="誕生年"
