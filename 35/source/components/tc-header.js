@@ -292,7 +292,11 @@ Vue.component('tc-header', {
 						value = value.replace(')', '');
 						value = value.split(', ');
 						break;
+					case ' like ':
+						// breakすることでinputData[キー名]に値を入れることができる
+						break;
 					default:
+						// 値を入れたくないのでcontinueする
 						continue;
 				}
 
@@ -450,7 +454,7 @@ Vue.component('tc-header', {
 
 						<!-- 誕生年 -->
 						<v-select
-							v-model="inputInfo['誕生年']"
+							v-model="userInfo['誕生年']"
 							:items="aryBirthYear"
 							item-text="text"
 							item-value="value"
