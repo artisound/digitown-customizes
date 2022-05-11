@@ -158,52 +158,51 @@ Vue.component('tc-header', {
       }).catch(console.error),
     ]);
 
-    if(aryJobEntryInfo) {
-      // LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
-      this.aryRecord = aryJobEntryInfo.records.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
-      // 配列の要素をカンマ区切りの文字列に変更する
-      this.aryRecord = this.aryRecord.map(record => {
-        record.勤務地   = { value: record.勤務地.value.join(', ') };
-        record.契約形態 = { value: record.契約形態.value.join(', ') };
-        record.曜日     = { value: record.曜日.value.join(', ') };
+    if(!aryJobEntryInfo) return;
+		// LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
+		this.aryRecord = aryJobEntryInfo.records.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
+		// 配列の要素をカンマ区切りの文字列に変更する
+		this.aryRecord = this.aryRecord.map(record => {
+			record.勤務地   = { value: record.勤務地.value.join(', ') };
+			record.契約形態 = { value: record.契約形態.value.join(', ') };
+			record.曜日     = { value: record.曜日.value.join(', ') };
 
-        return record;
-      });
+			return record;
+		});
 
-      this.aryRecord = this.aryRecord.map(record => {
-        const rec = aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value);
-        return rec ? Object.assign(rec, record) : record;
-      });
+		this.aryRecord = this.aryRecord.map(record => {
+			const rec = aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value);
+			return rec ? Object.assign(rec, record) : record;
+		});
 
-      // スカウト情報を取得する
-      const objScoutParam = {
-        app:    appId_scout,
-        condition:  'LINEユーザーID != ""',
-        fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
-      };
+		// スカウト情報を取得する
+		const objScoutParam = {
+			app:    appId_scout,
+			condition:  'LINEユーザーID != ""',
+			fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
+		};
 
-      const aryScout = await client.record.getAllRecords(objScoutParam);
-      this.aryRecord = this.aryRecord.map(record => {
-        const recs = aryScout.filter(r => r.LINEユーザーID.value == record.LINEユーザーID.value );
+		const aryScout = await client.record.getAllRecords(objScoutParam);
+		this.aryRecord = this.aryRecord.map(record => {
+			const recs = aryScout.filter(r => r.LINEユーザーID.value == record.LINEユーザーID.value );
 
-        record.スカウト状態 = recs.length ? { value: recs[recs.length - 1].スカウト状態.value } : { value: ' - ' };
-        return record;
-      });
+			record.スカウト状態 = recs.length ? { value: recs[recs.length - 1].スカウト状態.value } : { value: ' - ' };
+			return record;
+		});
 
-      this.aryRecord.map(record => {
-        return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
-      });
+		this.aryRecord.map(record => {
+			return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
+		});
 
-      this.aryCity = await _connectMySQLaxios({
-        db: { name: 'tc2_digitown' },
-        action: 'get',
-        table: 'dt1_city_master'
-      });
+		this.aryCity = await _connectMySQLaxios({
+			db: { name: 'tc2_digitown' },
+			action: 'get',
+			table: 'dt1_city_master'
+		});
 
-      // 絞り込み条件をフォームに反映させる
-      this.paramsToForm(getParam('query'), this.inputInfo);
-      this.paramsToForm(getParam('ui_query'), this.userInfo);
-    }
+		// 絞り込み条件をフォームに反映させる
+		this.paramsToForm(getParam('query'), this.inputInfo);
+		this.paramsToForm(getParam('ui_query'), this.userInfo);
 	},
 	methods: {
 		/** ---------------------------------------------------------------------
