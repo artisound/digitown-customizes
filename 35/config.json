@@ -16,6 +16,7 @@
                 "35/source/components/tc-search.js",
                 "35/source/components/tc-header.js",
                 "35/source/components/tc-param.js",
+                "35/source/components/tc-table.js",
                 "functions.js",
                 "35/dist/35.min.js"
             ],
