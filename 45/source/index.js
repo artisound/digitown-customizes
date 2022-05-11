@@ -43,7 +43,7 @@ const client = new KintoneRestAPIClient();
     else if (event.viewId == 5700739) {
       const appEl = document.getElementById('app');
       const vAppEl = document.createElement('v-app');
-      vAppEl.innerHTML = '<tc-header :client="client"></tc-header>';
+      vAppEl.innerHTML = `<tc-param :client="client"></tc-param>`;
       appEl.appendChild(vAppEl);
 
       vm.$mount('#app');

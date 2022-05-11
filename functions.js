@@ -27,3 +27,52 @@ function zipcodeAutoHyphen(zipcode, addHyphen = true) {
   const zip = zipcode.replace(/-/g, '').slice( 0, 7 );
   return addHyphen ? zip.slice(0, 3) + '-' + zip.slice(3, 7) : zip;
 }
+
+
+/** ---------------------------------------------------------------------
+ * kintoneで検索するためのクエリを作成する関数
+ * @param {Object} obj      - selectedオブジェクト
+ * @param {Boolean} isScout - true | false
+ --------------------------------------------------------------------- */
+function _getQueryText(obj, isScout) {
+  const aryQuery = [
+    'LINEユーザーID!=""',
+    '友達状態 in ("友だち")'
+  ];
+
+  for (const KEY in obj) {
+    const NEW_VALUE = obj[KEY];
+    if (Array.isArray(NEW_VALUE)) {
+      // 配列
+      if (!NEW_VALUE) continue;
+      if (NEW_VALUE.length < 1) continue;
+      let objyQuery = {
+        [KEY]: []
+      };
+      for (const INDEX in NEW_VALUE) {
+        objyQuery[KEY].push(`"${NEW_VALUE[INDEX]}"`);
+      }
+      aryQuery.push(`${KEY} in (${objyQuery[KEY].join(", ")})`);
+    } else {
+      // 文字列
+      if (!NEW_VALUE) continue;
+      if (NEW_VALUE.length < 1) continue;
+      switch (KEY) {
+        case '郵便番号':
+        case '市名':
+          aryQuery.push(`${KEY} like "${NEW_VALUE}"`);
+          break;
+        default:
+          aryQuery.push(`${KEY}="${NEW_VALUE}"`);
+          break;
+      }
+    }
+  }
+
+  if (isScout) {
+    aryQuery.push('求人配信 in ("受け取る")');
+    if (!aryQuery.find(v => v.includes('年齢_年_'))) aryQuery.push('年齢_年_ >= 16');
+  }
+
+  return aryQuery.join(' and ');
+}
