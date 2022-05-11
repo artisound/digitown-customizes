@@ -159,9 +159,8 @@ Vue.component('tc-header', {
     ]);
 
     if(aryJobEntryInfo) {
-      this.aryRecord = aryJobEntryInfo.records;
       // LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
-      this.aryRecord = this.aryRecord.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
+      this.aryRecord = aryJobEntryInfo.records.filter(record => aryUserInfo.find(v => v.LINEユーザーID.value === record.LINEユーザーID.value) );
       // 配列の要素をカンマ区切りの文字列に変更する
       this.aryRecord = this.aryRecord.map(record => {
         record.勤務地   = { value: record.勤務地.value.join(', ') };
