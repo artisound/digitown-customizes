@@ -62,7 +62,8 @@ function _getQueryText(obj, isScout) {
           aryQuery.push(`${KEY} like "${NEW_VALUE}"`);
           break;
         default:
-          aryQuery.push(`${KEY}="${NEW_VALUE}"`);
+          const value = Number(NEW_VALUE) ? Number(NEW_VALUE) : `"${NEW_VALUE}"`;
+          aryQuery.push(`${KEY} = ${value}`);
           break;
       }
     }
