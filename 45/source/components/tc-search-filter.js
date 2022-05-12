@@ -156,106 +156,108 @@ Vue.component('tc-search-filter', {
       <!-- 見出し -->
       <h2 class="fw-bold m-0 mb-2">属性で絞り込む</h2>
       <!-- 絞り込み条件 -->
-      <v-form class="d-flex align-items-center flex-wrap gap-4">
-        <!-- 性別 -->
-        <fieldset
-          class="rounded-2 pt-0 pb-2 mt-n2"
-          style="border-color: rgba(0, 0, 0, .38);"
-        >
-          <legend style="color:rgba(0, 0, 0, .6); font-size: 13px;">
-            <span>性別</span>
-          </legend>
-          <div
-            class="gender d-inline-block position-relative"
-            v-for="(gender, index) in aryGender"
+      <div class="d-flex">
+        <v-form class="d-flex align-items-center flex-wrap gap-4">
+          <!-- 性別 -->
+          <fieldset
+            class="rounded-2 pt-0 pb-2 mt-n2"
+            style="border-color: rgba(0, 0, 0, .38);"
           >
-            <input
-              class="opacity-0 position-absolute left-0"
-              :value="gender"
-              :id="'gender' + index"
-              type="checkbox"
-              v-model="inputInfo['性別']"
+            <legend style="color:rgba(0, 0, 0, .6); font-size: 13px;">
+              <span>性別</span>
+            </legend>
+            <div
+              class="gender d-inline-block position-relative"
+              v-for="(gender, index) in aryGender"
             >
-            <label
-              class="px-3 rounded-2 d-inline-block"
-              :class="index > 0 ? 'm-0' : 'me-2'"
-              style="padding: 6px 0; cursor: pointer; transition: .2s;"
-              :for="'gender' + index"
-            >{{ gender }}</label>
-          </div>
-        </fieldset>
+              <input
+                class="opacity-0 position-absolute left-0"
+                :value="gender"
+                :id="'gender' + index"
+                type="checkbox"
+                v-model="inputInfo['性別']"
+              >
+              <label
+                class="px-3 rounded-2 d-inline-block"
+                :class="index > 0 ? 'm-0' : 'me-2'"
+                style="padding: 6px 0; cursor: pointer; transition: .2s;"
+                :for="'gender' + index"
+              >{{ gender }}</label>
+            </div>
+          </fieldset>
 
-        <!-- 年代 -->
-        <v-select
-          v-model="inputInfo['年代']"
-          :items="aryAge"
-          label="年代"
-          multiple
-          outlined
-          hide-details="auto"
-          style="max-width: 380px;"
-        ></v-select>
+          <!-- 年代 -->
+          <v-select
+            v-model="inputInfo['年代']"
+            :items="aryAge"
+            label="年代"
+            multiple
+            outlined
+            hide-details="auto"
+            style="max-width: 380px;"
+          ></v-select>
 
-        <!-- 年齢 -->
-        <v-select
-          v-model="inputInfo['年齢_年_']"
-          :items="aryYear"
-          item-text="text"
-          item-value="value"
-          label="年齢"
-          outlined
-          clearable
-          hide-details="auto"
-          style="max-width: 150px;"
-        ></v-select>
+          <!-- 年齢 -->
+          <v-select
+            v-model="inputInfo['年齢_年_']"
+            :items="aryYear"
+            item-text="text"
+            item-value="value"
+            label="年齢"
+            outlined
+            clearable
+            hide-details="auto"
+            style="max-width: 150px;"
+          ></v-select>
 
-        <!-- 誕生年 -->
-        <v-select
-          v-model="inputInfo['誕生年']"
-          :items="aryBirthYear"
-          item-text="text"
-          item-value="value"
-          label="誕生年"
-          outlined
-          clearable
-          hide-details="auto"
-          style="max-width: 150px;"
-        ></v-select>
+          <!-- 誕生年 -->
+          <v-select
+            v-model="inputInfo['誕生年']"
+            :items="aryBirthYear"
+            item-text="text"
+            item-value="value"
+            label="誕生年"
+            outlined
+            clearable
+            hide-details="auto"
+            style="max-width: 150px;"
+          ></v-select>
 
-        <!-- 誕生月 -->
-        <v-select
-          v-model="inputInfo['誕生月']"
-          label="誕生月"
-          :items="aryMonth"
-          item-text="text"
-          item-value="value"
-          outlined
-          clearable
-          hide-details="auto"
-          style="max-width: 150px;"
-        ></v-select>
+          <!-- 誕生月 -->
+          <v-select
+            v-model="inputInfo['誕生月']"
+            label="誕生月"
+            :items="aryMonth"
+            item-text="text"
+            item-value="value"
+            outlined
+            clearable
+            hide-details="auto"
+            style="max-width: 150px;"
+          ></v-select>
 
-        <!-- 郵便番号 -->
-        <v-text-field
-          label="郵便番号"
-          type="tel"
-          v-model="inputInfo['郵便番号']"
-          @change="zipcodeAddHypen($event)"
-          outlined
-          hide-details="auto"
-          style="max-width: 200px;"
-        ></v-text-field>
+          <!-- 郵便番号 -->
+          <v-text-field
+            label="郵便番号"
+            type="tel"
+            v-model="inputInfo['郵便番号']"
+            @change="zipcodeAddHypen($event)"
+            outlined
+            hide-details="auto"
+            style="max-width: 200px;"
+          ></v-text-field>
 
-        <!-- 市区町村 -->
-        <v-select
-          v-model="inputInfo['市名']"
-          label="市区町村"
-          :items="aryCity"
-          item-text="name"
-          outlined
-          hide-details="auto"
-        ></v-select>
-      </v-form>
+          <!-- 市区町村 -->
+          <v-select
+            v-model="inputInfo['市名']"
+            label="市区町村"
+            :items="aryCity"
+            item-text="name"
+            outlined
+            hide-details="auto"
+          ></v-select>
+        </v-form>
+      </div>
     </div>
 
     <!-- 条件2 -->
