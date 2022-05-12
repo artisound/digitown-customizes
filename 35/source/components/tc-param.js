@@ -68,14 +68,6 @@ Vue.component('tc-param', {
 
 			return column;
 		},
-		aryBirthYear() {
-			let birthYears = [];
-			for (let i = minBirthYear; i <= maxBirthYear; i++) {
-				const year = this.year - i;
-				birthYears.push({ text: year + '年', value: year });
-			}
-			return birthYears;
-		},
 		aryMonth() {
 			let ary = [];
 			for (let index = 1; index <= 12; index++) {
