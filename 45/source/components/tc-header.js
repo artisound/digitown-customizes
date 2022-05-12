@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 Vue.component('tc-header', {
   name: 'tc-header',
   props: {

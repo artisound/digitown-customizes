@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 const minBirthYear      = 10;
 const maxBirthYear      = 89;
 

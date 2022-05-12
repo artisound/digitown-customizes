@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 // レコード検索のデフォルトの条件
 const ARY_DEFAULT_QUERY = [
   'LINEユーザーID not in ("")',

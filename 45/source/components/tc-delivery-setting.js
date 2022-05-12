@@ -1,3 +1,4 @@
+/* eslint-disable strict */
 Vue.component('tc-delivery-setting', {
   name: 'tc-delivery-setting',
   props: {
