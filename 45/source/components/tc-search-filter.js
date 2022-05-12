@@ -312,7 +312,9 @@ Vue.component('tc-search-filter', {
     </div>
 
     <!-- ボタン -->
-    <v-card-actions>
+    <div
+      class="d-flex align-items-center p-2"
+    >
       <v-spacer></v-spacer>
       <!-- 検索条件クリアボタン -->
       <v-btn
@@ -322,6 +324,7 @@ Vue.component('tc-search-filter', {
       >
         クリア
       </v-btn>
+
       <!-- 絞り込むボタン -->
       <v-btn
         class="fw-bold fs-3"
@@ -331,7 +334,7 @@ Vue.component('tc-search-filter', {
       >
         絞り込む
       </v-btn>
-    </v-card-actions>
+    </div>
   </v-sheet>
   `,
 })
