@@ -28,7 +28,7 @@ Vue.component('tc-search-filter', {
 			return birthYears;
 		},
 		aryMonth() {
-			let ary = [];
+			const ary = [];
 			for (let index = 1; index <= 12; index++) {
 				ary.push({ text: index + '月', value: index });
 			}
