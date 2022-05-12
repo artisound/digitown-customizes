@@ -220,7 +220,7 @@ Vue.component('tc-search-filter', {
 			>
 				<!-- 見出し -->
 				<h2
-					class="fw-borld m-0 mb-2"
+					class="fw-bold m-0 mb-2"
 				>
 					エントリー情報で絞り込む
 				</h2>
