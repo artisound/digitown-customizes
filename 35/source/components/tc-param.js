@@ -314,12 +314,12 @@ Vue.component('tc-param', {
 	template: `
 		<div>
 			<tc-header
+				:is-admin="isAdmin"
 				:group="group"
 				:ssect="ssect"
 				:scost="scost"
 				:office-info-rec-id="officeInfoRecId"
 				:office-name="officeName"
-				:is-admin="isAdmin"
 			></tc-header>
 
 			<!-- 絞り込み -->
