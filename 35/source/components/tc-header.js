@@ -1,7 +1,14 @@
 /* eslint-disable strict */
 Vue.component('tc-header', {
 	name: 'tc-header',
-	props: [ 'group', 'ssect', 'scost', 'officeInfoRecId', 'officeName', 'isAdmin' ],
+	props: {
+		isAdmin:			{ type: Boolean,	default: false },
+		group:				{ type: String,		default: '' },
+		ssect:				{ type: String,		default: '' },
+		scost:				{ type: Number,		default: 0 },
+		officeName:			{ type: String,		default: '' },
+		officeInfoRecId:	{ type: Number,		default: 0 }
+	},
 	data() {
 		return {
 			isAdminOpen: false,
