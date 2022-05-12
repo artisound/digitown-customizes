@@ -10,6 +10,15 @@ Vue.component('tc-search-filter', {
 			aryAge: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
 		}
 	},
+	computed: {
+		aryYear() {
+			let years = [];
+			for (let i = minBirthYear; i <= maxBirthYear; i++) {
+				years.push({ text: i + '歳', value: i });
+			}
+			return years;
+		},
+	},
 	template: `
 		<!-- 絞り込み -->
 		<v-sheet
