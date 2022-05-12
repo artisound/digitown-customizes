@@ -227,70 +227,68 @@ Vue.component('tc-search-filter', {
 				</h2>
 
 				<!-- 絞り込み条件 -->
-				<v-form
-					class="d-flex align-items-center gap-4"
-				>
-					<!-- 勤務地 -->
-					<v-select
-						v-model="inputInfo['勤務地']"
-						:items="aryWorkLocation"
-						label="勤務地"
-						multiple
-						outlined
-						hide-details="auto"
-					></v-select>
+				<div class="d-flex">
+					<v-form
+						class="d-flex flex-wrap align-items-center gap-4"
+					>
+						<!-- 勤務地 -->
+						<v-select
+							v-model="inputInfo['勤務地']"
+							:items="aryWorkLocation"
+							label="勤務地"
+							multiple
+							outlined
+							hide-details="auto"
+						></v-select>
 
-					<!-- 契約形態 -->
-					<v-select
-						v-model="inputInfo['契約形態']"
-						:items="aryEmploymentStatus"
-						label="契約形態"
-						multiple
-						outlined
-						hide-details="auto"
-					></v-select>
+						<!-- 契約形態 -->
+						<v-select
+							v-model="inputInfo['契約形態']"
+							:items="aryEmploymentStatus"
+							label="契約形態"
+							multiple
+							outlined
+							hide-details="auto"
+						></v-select>
 
-					<!--勤務開始日 -->
-					<v-text-field
-						v-model="inputInfo['開始日']"
-						label="開始日"
-						type="date"
-						outlined
-						hide-details="auto"
-					></v-text-field>
+						<!--勤務開始日 -->
+						<v-text-field
+							v-model="inputInfo['開始日']"
+							label="開始日"
+							type="date"
+							outlined
+							hide-details="auto"
+						></v-text-field>
 
-					<!-- 曜日 -->
-					<v-select
-						v-model="inputInfo['曜日']"
-						:items="aryDay"
-						label="曜日"
-						multiple
-						outlined
-						hide-details="auto"
-					></v-select>
-				</v-form>
+						<!-- 曜日 -->
+						<v-select
+							v-model="inputInfo['曜日']"
+							:items="aryDay"
+							label="曜日"
+							multiple
+							outlined
+							hide-details="auto"
+						></v-select>
 
-				<v-form
-					class="d-flex align-items-center gap-4 mt-3"
-				>
-					<!-- 職種 -->
-					<v-text-field
-						v-model="inputInfo['希望職種']"
-						label="職種"
-						type="text"
-						outlined
-						hide-details="auto"
-					></v-text-field>
+						<!-- 職種 -->
+						<v-text-field
+							v-model="inputInfo['希望職種']"
+							label="職種"
+							type="text"
+							outlined
+							hide-details="auto"
+						></v-text-field>
 
-					<!-- 詳細職種 -->
-					<v-text-field
-						v-model="inputInfo['希望詳細職種']"
-						label="詳細職種"
-						type="text"
-						outlined
-						hide-details="auto"
-					></v-text-field>
-				</v-form>
+						<!-- 詳細職種 -->
+						<v-text-field
+							v-model="inputInfo['希望詳細職種']"
+							label="詳細職種"
+							type="text"
+							outlined
+							hide-details="auto"
+						></v-text-field>
+					</v-form>
+				</div>
 			</div>
 
 			<!-- ボタン -->
