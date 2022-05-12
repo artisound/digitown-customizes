@@ -7,6 +7,7 @@ Vue.component('tc-search-filter', {
 	data() {
 		return {
 			aryGender: [ "男性", "女性" ],
+			aryAge: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
 		}
 	},
 	template: `
