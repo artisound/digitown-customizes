@@ -138,6 +138,7 @@ Vue.component('tc-search-filter', {
   <v-sheet
     class="p-4"
     color="grey lighten-4"
+    elevation="1"
     style="margin-bottom: 24px;"
   >
 
