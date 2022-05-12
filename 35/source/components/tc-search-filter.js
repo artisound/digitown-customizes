@@ -2,7 +2,8 @@
 Vue.component('tc-search-filter', {
 	name: 'tc-search-filter',
 	props: {
-		inputInfo: { type: Object, default: {} }
+		inputInfo: { type: Object, default: {} },
+		userInfo: { type: Object, default: {} },
 	},
 	data() {
 		return {

@@ -313,6 +313,7 @@ Vue.component('tc-param', {
 
 			<tc-search-filter
 				:input-info="inputInfo"
+				:user-info="userInfo"
 			></tc-search-filter>
 
 			<!-- 配信設定 -->
