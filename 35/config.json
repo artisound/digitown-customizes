@@ -13,11 +13,11 @@
                 "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.js",
                 "https://js.cybozu.com/luxon/1.26.0/luxon.min.js",
                 "https://cdn.jsdelivr.net/npm/axios@0.x/dist/axios.min.js",
+                "functions.js",
                 "35/source/components/tc-param.js",
                 "35/source/components/tc-search-filter.js",
                 "common/tc-header.js",
                 "35/source/components/tc-table.js",
-                "functions.js",
                 "35/dist/35.min.js"
             ],
             "css": [
