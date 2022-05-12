@@ -16,8 +16,6 @@ Vue.component('tc-param', {
 	props: ['client'],
 	data() {
 		return {
-			// 契約形態一覧
-			aryEmploymentStatus: [ 'アルバイト・パート', '日雇い', '臨時（季節雇用）', '正社員', '契約社員', '派遣社員', '請負', '業務委託', 'その他' ],
 			// 曜日一覧
 			aryDay: [ '月', '火', '水', '木', '金', '土', '日', '祝' ],
 			inputInfo   : {
