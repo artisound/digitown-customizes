@@ -108,16 +108,11 @@ Vue.component('tc-param', {
       // ******************************************************************************************************************************
 		  // 事業所管理からレコードを取得する
       // ******************************************************************************************************************************
-      client.record.getRecords({
+      client.record.getAllRecords({
         app:				office_info,
-        query:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
+        condition:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
         fields:			['レコード番号', '事業所名', '残高']
-      }).then(resp => {
-        if (!resp) return;
-        const userRecord			= resp.records[0];
-        this.holdingTicket		= Number(userRecord['残高']['value']);
-        this.officeInfoRecId	= Number(userRecord['レコード番号']['value']);
-      }),
+      }).then(resp => { return resp; }).catch(console.error),
 
       // ******************************************************************************************************************************
 		  // LINE友だち管理からレコードを取得する
@@ -135,6 +130,13 @@ Vue.component('tc-param', {
         return resp;
       }).catch(console.error),
     ]);
+
+    // 事業所レコード情報を格納
+		if (!aryOfficeInfo && !aryOfficeInfo.length) return;
+		const userRecord			= aryOfficeInfo[0];
+    this.officeName				= userRecord["事業所名"].value;
+		this.holdingTicket		= Number(userRecord['残高']['value']);
+		this.officeInfoRecId	= Number(userRecord['レコード番号']['value']);
 
     if(!aryJobEntryInfo) return;
 		// LINE友だち管理のレコードとをジョブエントリーのレコードとLINEユーザーIDが一致するものだけ抽出する
