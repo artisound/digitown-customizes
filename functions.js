@@ -1,3 +1,7 @@
+// 検索対象の年齢の範囲
+const minBirthYear      = 10;
+const maxBirthYear      = 89;
+
 /** ************************************************************
  * Get the URL parameter value
  *

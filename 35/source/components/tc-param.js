@@ -7,8 +7,6 @@ const LOGIN_USER        = kintone.getLoginUser()['code'];                   // k
 const appId_user        = 45;                                               // LINE友だち管理
 const appId_scout       = 33;                                               // スカウト
 const office_info       = 28
-const minBirthYear      = 10;
-const maxBirthYear      = 89;
 const lxn               = luxon.DateTime.fromJSDate(new Date());
 const lxnY              = lxn.toFormat('yyyy');
 Vue.component('tc-param', {

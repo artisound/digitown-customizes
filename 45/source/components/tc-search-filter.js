@@ -1,6 +1,4 @@
 /* eslint-disable strict */
-const minBirthYear      = 10;
-const maxBirthYear      = 89;
 
 Vue.component('tc-search-filter', {
   name: 'tc-search-filter',
