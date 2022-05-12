@@ -2,6 +2,11 @@
 Vue.component('tc-search-filter', {
 	name: 'tc-search-filter',
 	props: {},
+	data() {
+		return {
+			aryGender: [ "男性", "女性" ],
+		}
+	},
 	template: `
 		<!-- 絞り込み -->
 		<v-sheet
