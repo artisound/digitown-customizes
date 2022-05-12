@@ -69,6 +69,11 @@ Vue.component('tc-search-filter', {
 
 			window.location.href    = ui_query ? `${url}&ui_query=${ui_query}` : url;
 		},
+		onClear() {
+			this.inputInfo  = { '年代': [], '性別': [] };
+			this.userInfo   = {};
+			this.onSearch();
+		},
 	},
 	template: `
 		<!-- 絞り込み -->

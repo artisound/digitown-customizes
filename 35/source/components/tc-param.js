@@ -257,11 +257,6 @@ Vue.component('tc-param', {
 				inputData[splits[0]] = value;
 			}
 		},
-		onClear() {
-			this.inputInfo  = { '年代': [], '性別': [] };
-			this.userInfo   = {};
-			this.onSearch();
-		},
 	},
 	template: `
 		<div>
