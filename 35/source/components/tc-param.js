@@ -262,22 +262,6 @@ Vue.component('tc-param', {
 			this.userInfo   = {};
 			this.onSearch();
 		},
-		/** ---------------------------------------------------------------------
-		 * 検索ボタンが押された時の処理
-		--------------------------------------------------------------------- */
-		onSearch() {
-			const query             = encodeURI(this.getQueryText(this.inputInfo));
-			const url               = `${APP_URL}?view=${VIEW_ID}&query=${query}&ssect=${this.ssect}&scost=${this.scost}&officeGroup=${this.group}`;
-			let ui_query            = '';
-			let aryUiQuery          = [];
-			for (let key in this.userInfo) {
-					if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
-			}
-
-			if (aryUiQuery.length) ui_query = aryUiQuery.join(' and ');
-
-			window.location.href    = ui_query ? `${url}&ui_query=${ui_query}` : url;
-		},
 	},
 	template: `
 		<div>
