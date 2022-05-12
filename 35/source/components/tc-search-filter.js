@@ -216,7 +216,7 @@ Vue.component('tc-search-filter', {
 
 			<!-- エントリー情報絞り込み -->
 			<div
-				class="border rounded mb-3 px-3 py-2"
+				class="border rounded mb-3 px-3 py-2 bg-white"
 			>
 				<!-- 見出し -->
 				<h2
