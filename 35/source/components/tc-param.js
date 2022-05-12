@@ -68,13 +68,6 @@ Vue.component('tc-param', {
 
 			return column;
 		},
-		aryMonth() {
-			let ary = [];
-			for (let index = 1; index <= 12; index++) {
-				ary.push({ text: index + '月', value: index });
-			}
-			return ary;
-		}
 	},
 	watch: {
 		isShowScout(newVal) {

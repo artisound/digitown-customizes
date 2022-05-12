@@ -27,6 +27,13 @@ Vue.component('tc-search-filter', {
 			}
 			return birthYears;
 		},
+		aryMonth() {
+			let ary = [];
+			for (let index = 1; index <= 12; index++) {
+				ary.push({ text: index + '月', value: index });
+			}
+			return ary;
+		}
 	},
 	template: `
 		<!-- 絞り込み -->
