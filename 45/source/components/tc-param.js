@@ -196,14 +196,13 @@ Vue.component("tc-param", {
 
 
         const aryJobEntry = await client.record.getAllRecords(objParam);
-        aryRecord = aryRecord.filter(record => {
-          return aryJobEntry.find(v => v.LINEユーザーID.value == record.LINEユーザーID.value);
-        });
-
         this.aryRecord = aryRecord.map((record) => {
           const matchRec = aryJobEntry.find(
             (v) => v.LINEユーザーID.value == record.LINEユーザーID.value
           );
+
+          if (!matchRec) return record;
+
           record["勤務地"] = { value: matchRec["勤務地"]["value"].join(", ") };
           record["契約形態"] = {
             value: matchRec["契約形態"]["value"].join(", "),
