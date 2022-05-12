@@ -9,6 +9,7 @@ Vue.component('tc-search-filter', {
 		return {
 			aryGender: [ "男性", "女性" ],
 			aryAge: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
+			aryCity: [],
 		}
 	},
 	computed: {
@@ -34,6 +35,13 @@ Vue.component('tc-search-filter', {
 			}
 			return ary;
 		}
+	},
+	mounted: async function() {
+		this.aryCity = await _connectMySQLaxios({
+			db: { name: 'tc2_digitown' },
+			action: 'get',
+			table: 'dt1_city_master'
+		});
 	},
 	template: `
 		<!-- 絞り込み -->

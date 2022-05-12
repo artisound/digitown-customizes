@@ -16,7 +16,6 @@ Vue.component('tc-param', {
 	props: ['client'],
 	data() {
 		return {
-			aryCity: [],
 			// 勤務地一覧
 			aryWorkLocation: [ '高知県内全域', '高知市', '室戸市', '安芸市', '南国市', '土佐市', '須崎市', '宿毛市', '土佐清水市', '四万十市', '香南市', '香美市', '東洋町', '奈半利町', '田野町', '安田町', '北川村', '馬路村', '芸西村', '本山町', '大豊町', '土佐町', '大川村', 'いの町', '仁淀川町', '中土佐町', '佐川町', '越知町', '檮原町', '日高村', '津野町', '四万十町', '大月町', '三原村', '黒潮町' ],
 			// 契約形態一覧
@@ -177,12 +176,6 @@ Vue.component('tc-param', {
 
 		this.aryRecord.map(record => {
 			return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
-		});
-
-		this.aryCity = await _connectMySQLaxios({
-			db: { name: 'tc2_digitown' },
-			action: 'get',
-			table: 'dt1_city_master'
 		});
 
 		// 絞り込み条件をフォームに反映させる
