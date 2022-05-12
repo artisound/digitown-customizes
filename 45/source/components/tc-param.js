@@ -315,6 +315,7 @@ Vue.component("tc-param", {
   <div>
     <!-- 管理者のみ見られる情報 -->
     <tc-header
+      :title="'LINEターゲット配信　'"
       :is-admin="isAdmin"
       :group="group"
       :ssect="ssect"

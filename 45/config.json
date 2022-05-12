@@ -13,7 +13,7 @@
                 "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
                 "functions.js",
                 "45/source/components/tc-param.js",
-                "45/source/components/tc-header.js",
+                "common/tc-header.js",
                 "45/source/components/tc-search-filter.js",
                 "45/source/components/tc-delivery-setting.js",
                 "45/source/js/kintone-ui-component.min.js",

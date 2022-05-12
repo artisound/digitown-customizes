@@ -314,6 +314,7 @@ Vue.component('tc-param', {
 	template: `
 		<div>
 			<tc-header
+				:title="'Jobエントリー'"
 				:is-admin="isAdmin"
 				:group="group"
 				:ssect="ssect"
