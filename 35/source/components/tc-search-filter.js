@@ -1,7 +1,9 @@
 /* eslint-disable strict */
 Vue.component('tc-search-filter', {
 	name: 'tc-search-filter',
-	props: {},
+	props: {
+		inputInfo: { type: Object, default: {} }
+	},
 	data() {
 		return {
 			aryGender: [ "男性", "女性" ],

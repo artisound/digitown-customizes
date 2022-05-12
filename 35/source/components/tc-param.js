@@ -24,7 +24,12 @@ Vue.component('tc-param', {
 			aryEmploymentStatus: [ 'アルバイト・パート', '日雇い', '臨時（季節雇用）', '正社員', '契約社員', '派遣社員', '請負', '業務委託', 'その他' ],
 			// 曜日一覧
 			aryDay: [ '月', '火', '水', '木', '金', '土', '日', '祝' ],
-			inputInfo: { '年代': [], '性別': [] },
+			inputInfo   : {
+        // 検索で条件に指定された項目一覧
+        // 年代と性別は配列を用意しておかないとチェックボックスの結果を受け取れない
+        年代: [],
+        性別: [],
+      },
 			userInfo: {},
 			aryRecord: [],
 			year: lxnY,
@@ -322,7 +327,9 @@ Vue.component('tc-param', {
 				:office-name="officeName"
 			></tc-header>
 
-			<tc-search-filter></tc-search-filter>
+			<tc-search-filter
+				:input-info="inputInfo"
+			></tc-search-filter>
 
 			<!-- 配信設定 -->
 			<v-sheet
