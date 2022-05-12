@@ -19,7 +19,7 @@ Vue.component('tc-search-filter', {
 			return years;
 		},
 		aryBirthYear() {
-			let birthYears = [];
+			const birthYears = [];
 			for (let i = minBirthYear; i <= maxBirthYear; i++) {
 				const year = this.year - i;
 				birthYears.push({ text: year + '年', value: year });
