@@ -323,9 +323,11 @@ Vue.component('tc-param', {
 				:office-name="officeName"
 			></tc-header>
 
+			<tc-search-filter></tc-search-filter>
+			
 			<!-- 絞り込み -->
 			<v-sheet
-				class="px-4 mb-3"
+				class="px-4 mb-3 d-none"
 				color="grey lighten-4"
 				elevation="1"
 			>
