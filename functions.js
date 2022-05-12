@@ -1,3 +1,4 @@
+const APP_ID            = kintone.app.getId();
 // 検索対象の年齢の範囲
 const minBirthYear      = 10;
 const maxBirthYear      = 89;

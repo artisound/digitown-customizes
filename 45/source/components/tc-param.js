@@ -12,7 +12,6 @@ const LOGIN_USER        = kintone.getLoginUser().code;  // kintoneのログイ�
 const appId_entry       = 35;                           // ジョブエントリー
 const office_info       = 28                            // 事業所管理
 
-const APP_ID            = kintone.app.getId();          // LINE友だち管理のアプリID
 const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
 const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
 
