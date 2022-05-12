@@ -1,6 +1,6 @@
 /* eslint-disable strict */
 Vue.component('tc-header', {
-	name: 'tcHeader',
+	name: 'tc-header',
 	props: [ 'group', 'ssect', 'scost', 'officeInfoRecId', 'officeName', 'isAdmin' ],
 	data() {
 		return {
