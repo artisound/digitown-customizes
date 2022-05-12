@@ -78,9 +78,10 @@ Vue.component('tc-search-filter', {
 	template: `
 		<!-- 絞り込み -->
 		<v-sheet
-			class="px-4 mb-3"
+			class="p-4"
 			color="grey lighten-4"
 			elevation="1"
+			style="margin-bottom: 24px;"
 		>
 			<!-- 見出し -->
 			<h2
