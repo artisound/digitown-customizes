@@ -237,7 +237,10 @@ Vue.component('tc-param', {
 
 			<!-- 配信設定 -->
 			<v-sheet
-				class="px-4 mb-3"
+				class="px-4"
+				color="grey lighten-4"
+				elevation="1"
+				style="margin-bottom: 24px;"
 			>
 				<div
 					class="d-flex"
