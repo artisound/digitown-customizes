@@ -91,7 +91,7 @@ Vue.component('tc-search-filter', {
       }
 
       // 入力値をURIエンコード
-      const query = encodeURI(_getQueryText(this.inputInfo, isScout));
+      const query = encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '友達状態 in ("友だち")' ], isScout));
 
       // クエリパラメータ生成①
       const aryParam = [];

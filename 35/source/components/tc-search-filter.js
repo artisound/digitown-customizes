@@ -54,7 +54,7 @@ Vue.component('tc-search-filter', {
 		 * 検索ボタンが押された時の処理
 		--------------------------------------------------------------------- */
 		onSearch() {
-			const query             = encodeURI(this.getQueryText(this.inputInfo));
+			const query             = encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '年齢 >= 16' ]));
 			const url               = `${APP_URL}?view=${VIEW_ID}&query=${query}&ssect=${this.ssect}&scost=${this.scost}&officeGroup=${this.group}`;
 			let ui_query            = '';
 			let aryUiQuery          = [];

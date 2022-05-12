@@ -33,11 +33,8 @@ function zipcodeAutoHyphen(zipcode, addHyphen = true) {
  * @param {Object} obj      - selectedオブジェクト
  * @param {Boolean} isScout - true | false
  --------------------------------------------------------------------- */
-function _getQueryText(obj, isScout) {
-  const aryQuery = [
-    'LINEユーザーID!=""',
-    '友達状態 in ("友だち")'
-  ];
+function _getQueryText(obj, defaultQuery, isScout = false) {
+  const aryQuery = defaultQuery;
 
   for (const KEY in obj) {
     const NEW_VALUE = obj[KEY];
