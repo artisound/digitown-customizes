@@ -177,51 +177,6 @@ Vue.component('tc-param', {
 		this.paramsToForm(getParam('ui_query'), this.userInfo);
 	},
 	methods: {
-		/** ---------------------------------------------------------------------
-		 * kintoneで検索するためのクエリを作成する関数
-		 * @param {object} obj selectedオブジェクト
-		--------------------------------------------------------------------- */
-		getQueryText(obj) {
-			let aryQuery = [
-				'LINEユーザーID != ""',
-				'年齢 >= 16'
-			];
-
-			for (const KEY in obj) {
-				const NEW_VALUE = obj[KEY];
-				if (Array.isArray(NEW_VALUE)) {
-					// 配列
-					if (!NEW_VALUE) continue;
-					if (NEW_VALUE.length < 1) continue;
-					let objyQuery = {
-						[KEY]: []
-					};
-					for (const INDEX in NEW_VALUE) {
-						objyQuery[KEY].push(`"${NEW_VALUE[INDEX]}"`);
-					}
-					aryQuery.push(`${KEY} in (${objyQuery[KEY].join(", ")})`);
-				} else {
-					// 文字列
-					if (!NEW_VALUE) continue;
-					if (NEW_VALUE.length < 1) continue;
-					switch (KEY) {
-						case '郵便番号':
-						case '市名':
-						case '希望職種':
-						case '希望詳細職種':
-						case '希望業種':
-						case '希望詳細業種':
-							aryQuery.push(`${KEY} like "${NEW_VALUE}"`);
-							break;
-						default:
-							const value = Number(NEW_VALUE) ? Number(NEW_VALUE) : `"${NEW_VALUE}"`;
-							aryQuery.push(`${KEY} = ${value}`);
-							break;
-					}
-				}
-			}
-			return aryQuery.join(' and ');
-		},
 		getSepaText(text) {
       const seps = [ ' >= ', ' != ', ' = ', ' in ', ' like ' ];
       for (let sep of seps) if(text.includes(sep)) return sep;
