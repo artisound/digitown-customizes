@@ -135,7 +135,7 @@ Vue.component('tc-search-filter', {
     },
   },
   template: `
-  <v-card
+  <v-sheet
     class="p-4"
     color="grey lighten-4"
     style="margin-bottom: 24px;"
@@ -332,6 +332,6 @@ Vue.component('tc-search-filter', {
         絞り込む
       </v-btn>
     </v-card-actions>
-  </v-card>
+  </v-sheet>
   `,
 })
