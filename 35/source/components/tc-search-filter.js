@@ -2,6 +2,9 @@
 Vue.component('tc-search-filter', {
 	name: 'tc-search-filter',
 	props: {
+		group: { type: String,  default: '' },
+		ssect: { type: String,  default: '' },
+		scost: { type: Number,  default: 0 },
 		inputInfo: { type: Object, default: {} },
 		userInfo: { type: Object, default: {} },
 	},

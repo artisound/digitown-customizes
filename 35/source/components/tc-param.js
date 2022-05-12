@@ -276,6 +276,9 @@ Vue.component('tc-param', {
 			></tc-header>
 
 			<tc-search-filter
+				:group="group"
+				:ssect="ssect"
+				:scost="scost"
 				:input-info="inputInfo"
 				:user-info="userInfo"
 			></tc-search-filter>
