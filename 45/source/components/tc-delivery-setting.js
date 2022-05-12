@@ -53,9 +53,10 @@ Vue.component('tc-delivery-setting', {
     },
   },
   template: `
-  <v-card
+  <v-sheet
     class="px-4"
     color="grey lighten-4"
+    elevation="1"
     style="margin-bottom: 24px;"
   >
 
@@ -110,6 +111,6 @@ Vue.component('tc-delivery-setting', {
         </v-btn>
       </div>
     </div>
-  </v-card>
+  </v-sheet>
   `,
 })
