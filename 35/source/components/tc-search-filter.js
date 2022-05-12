@@ -90,22 +90,14 @@ Vue.component('tc-search-filter', {
 				ターゲット
 			</h2>
 			<p>配信対象を絞り込む場合は以下の内容を設定して、「絞り込む」ボタンを押してください。</p>
-			<p
-				class="m-0 text-secondary"
-			>
-				※すべてAND条件で絞り込みます(例: 「男性」「30代」で絞り込んだ場合は、30代の男性のみがリスト表示されます)
-			</p>
+			<p class="m-0 text-secondary">※すべてAND条件で絞り込みます(例: 「男性」「30代」で絞り込んだ場合は、30代の男性のみがリスト表示されます)</p>
 
 			<!-- 属性絞り込み -->
 			<div
 				class="border rounded mb-3 px-3 py-2 bg-white"
 			>
 				<!-- 見出し -->
-				<h2
-					class="fw-bold m-0 mb-2"
-				>
-					属性で絞り込む
-				</h2>
+				<h2 class="fw-bold m-0 mb-2">属性で絞り込む</h2>
 				
 				<!-- 絞り込み条件 -->
 				<div class="d-flex">
@@ -222,11 +214,7 @@ Vue.component('tc-search-filter', {
 				class="border rounded mb-3 px-3 py-2 bg-white"
 			>
 				<!-- 見出し -->
-				<h2
-					class="fw-bold m-0 mb-2"
-				>
-					エントリー情報で絞り込む
-				</h2>
+				<h2 class="fw-bold m-0 mb-2">エントリー情報で絞り込む</h2>
 
 				<!-- 絞り込み条件 -->
 				<div class="d-flex">
