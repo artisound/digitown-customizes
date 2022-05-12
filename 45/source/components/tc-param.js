@@ -172,7 +172,7 @@ Vue.component("tc-param", {
     // ジョブエントリー情報
     console.log(aryJobEntryInfo)
     if(aryJobEntryInfo && aryJobEntryInfo.length) {
-      if (this.ssect.includes("求人")) {
+      if (!this.ssect.includes("求人")) {
         this.aryRecord = aryJobEntryInfo;
         return;
       } else {
