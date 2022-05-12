@@ -137,7 +137,7 @@ Vue.component("tc-param", {
     /** *******************************************************
      * 一気にデータ取得
      ******************************************************* */
-    const [aryOfficeInfo, aryJobEntryInfo] = await Promise.all([
+    const [aryOfficeInfo, aryUserInfo] = await Promise.all([
       // ******************************************************************************************************************************
 		  // 事業所管理からレコードを取得する
       // ******************************************************************************************************************************
@@ -175,13 +175,13 @@ Vue.component("tc-param", {
     console.log(this.inputInfo);
 
     // ジョブエントリー情報
-    console.log(aryJobEntryInfo)
-    if(aryJobEntryInfo && aryJobEntryInfo.length) {
+    console.log(aryUserInfo)
+    if(aryUserInfo && aryUserInfo.length) {
       if (!this.ssect.includes("求人")) {
-        this.aryRecord = aryJobEntryInfo;
+        this.aryRecord = aryUserInfo;
         return;
       } else {
-        let aryRecord = aryJobEntryInfo;
+        let aryRecord = aryUserInfo;
 
         // ジョブエントリーアプリからレコードを取得する
         const objParam = {
