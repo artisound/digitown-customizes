@@ -57,7 +57,7 @@ Vue.component('tc-search-filter', {
 		 * 検索ボタンが押された時の処理
 		--------------------------------------------------------------------- */
 		onSearch() {
-			const query             = encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '年齢 >= 16' ]));
+			const query = encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '年齢 >= 16' ]));
 			// クエリパラメータ生成①
 			const aryParam = [];
 			// 「スカウトする」にはssectの値がないのでif文はコメントアウト
