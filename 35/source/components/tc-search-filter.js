@@ -96,34 +96,26 @@ Vue.component('tc-search-filter', {
 			style="margin-bottom: 24px;"
 		>
 			<!-- 見出し -->
-			<h2
-				class="py-2 px-5 d-inline-block text-white bg-secondary fw-bold rounded-pill"
-			>
+			<h2 class="py-2 px-5 d-inline-block text-white bg-secondary fw-bold rounded-pill">
 				ターゲット
 			</h2>
 			<p>配信対象を絞り込む場合は以下の内容を設定して、「絞り込む」ボタンを押してください。</p>
 			<p class="m-0 text-secondary">※すべてAND条件で絞り込みます(例: 「男性」「30代」で絞り込んだ場合は、30代の男性のみがリスト表示されます)</p>
 
 			<!-- 属性絞り込み -->
-			<div
-				class="border rounded mb-3 px-3 py-2 bg-white"
-			>
+			<div class="border rounded mb-3 px-3 py-2 bg-white">
 				<!-- 見出し -->
 				<h2 class="fw-bold m-0 mb-2">属性で絞り込む</h2>
 				
 				<!-- 絞り込み条件 -->
 				<div class="d-flex">
-					<v-form
-						class="d-flex flex-wrap align-items-center flex-wrap gap-4"
-					>
+					<v-form class="d-flex flex-wrap align-items-center flex-wrap gap-4">
 						<!-- 性別 -->
 						<fieldset
 							class="rounded-2 pt-0 pb-2 mt-n2"
 							style="border-color: rgba(0, 0, 0, .38);"
 						>
-							<legend
-								style="color: rgba(0, 0, 0, .6); font-size: 13px"
-							>
+							<legend style="color: rgba(0, 0, 0, .6); font-size: 13px">
 								<span>性別</span>
 							</legend>
 							<div
@@ -142,9 +134,7 @@ Vue.component('tc-search-filter', {
 									:class="index > 0 ? 'm-0' : 'me-2'"
 									style="padding: 6px 0; cursor: pointer; transitio: .2s;"
 									:for="'gender' + index"
-								>
-									{{ gender }}
-								</label>
+								>{{ gender }}</label>
 							</div>
 						</fieldset>
 
@@ -222,17 +212,13 @@ Vue.component('tc-search-filter', {
 			</div>
 
 			<!-- エントリー情報絞り込み -->
-			<div
-				class="border rounded mb-3 px-3 py-2 bg-white"
-			>
+			<div class="border rounded mb-3 px-3 py-2 bg-white">
 				<!-- 見出し -->
 				<h2 class="fw-bold m-0 mb-2">エントリー情報で絞り込む</h2>
 
 				<!-- 絞り込み条件 -->
 				<div class="d-flex">
-					<v-form
-						class="d-flex flex-wrap align-items-center gap-4"
-					>
+					<v-form class="d-flex flex-wrap align-items-center gap-4">
 						<!-- 勤務地 -->
 						<v-select
 							v-model="inputInfo['勤務地']"
@@ -294,18 +280,14 @@ Vue.component('tc-search-filter', {
 			</div>
 
 			<!-- ボタン -->
-			<div
-				class="d-flex align-items-center p-2"
-			>
+			<div class="d-flex align-items-center p-2">
 				<v-spacer></v-spacer>
 				<!-- 検索条件クリアボタン -->
 				<v-btn
 					class="fw-bold fs-3"
 					x-large
 					@click="onClear()"
-				>
-					クリア
-				</v-btn>
+				>クリア</v-btn>
 
 				<!-- 絞り込むボタン -->
 				<v-btn
@@ -313,9 +295,7 @@ Vue.component('tc-search-filter', {
 					x-large
 					color="primary"
 					@click="onSearch()"
-				>
-					絞り込む
-				</v-btn>
+				>絞り込む</v-btn>
 			</div>
 		</v-sheet>
 	`
