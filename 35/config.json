@@ -17,6 +17,7 @@
                 "35/source/components/tc-param.js",
                 "35/source/components/tc-search-filter.js",
                 "common/tc-header.js",
+                "35/source/components/tc-delivery-setting.js",
                 "35/source/components/tc-table.js",
                 "35/dist/35.min.js"
             ],
