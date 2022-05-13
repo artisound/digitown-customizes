@@ -72,8 +72,8 @@ Vue.component('tc-search-filter', {
 			for (const param in addParam) aryParam.push(`${param}=${addParam[param]}`);
 			// }
 			
-			let aryUiQuery          = [];
-			for (let key in this.userInfo) {
+			const aryUiQuery          = [];
+			for (const key in this.userInfo) {
 				if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
 			}
 
