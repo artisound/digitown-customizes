@@ -18,7 +18,7 @@ Vue.component('tc-param', {
         // 年代と性別は配列を用意しておかないとチェックボックスの結果を受け取れない
         年代: [],
         性別: [],
-      },
+			},
 			userInfo: {},
 			aryRecord: [],
 			year: lxnY,
