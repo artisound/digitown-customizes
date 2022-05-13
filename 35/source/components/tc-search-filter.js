@@ -58,16 +58,28 @@ Vue.component('tc-search-filter', {
 		--------------------------------------------------------------------- */
 		onSearch() {
 			const query             = encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '年齢 >= 16' ]));
-			const url               = `${APP_URL}?view=${VIEW_ID}&query=${query}&ssect=${this.ssect}&scost=${this.scost}&officeGroup=${this.group}`;
-			let ui_query            = '';
+			// クエリパラメータ生成①
+			const aryParam = [];
+			// 「スカウトする」にはssectの値がないのでif文はコメントアウト
+			// if (this.ssect && this.scost && this.group) {
+			const addParam = {
+				view: VIEW_ID,
+				query: query,
+				ssect: this.ssect,
+				scost: this.scost,
+				officeGroup: this.group
+			};
+			for (const param in addParam) aryParam.push(`${param}=${addParam[param]}`);
+			// }
+			
 			let aryUiQuery          = [];
 			for (let key in this.userInfo) {
 					if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
 			}
 
-			if (aryUiQuery.length) ui_query = aryUiQuery.join(' and ');
+			if (aryUiQuery.length) aryParam.push(`ui_query=${aryUiQuery.join(' and ')}`);
 
-			window.location.href    = ui_query ? `${url}&ui_query=${ui_query}` : url;
+			window.location.href    = APP_URL + '?' + aryParam.join('&');
 		},
 		onClear() {
 			this.inputInfo  = { '年代': [], '性別': [] };
