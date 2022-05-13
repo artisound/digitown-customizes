@@ -72,14 +72,14 @@ Vue.component('tc-search-filter', {
 			for (const param in addParam) aryParam.push(`${param}=${addParam[param]}`);
 			// }
 			
-			const aryUiQuery          = [];
+			const aryUiQuery = [];
 			for (const key in this.userInfo) {
 				if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
 			}
 
 			if (aryUiQuery.length) aryParam.push(`ui_query=${aryUiQuery.join(' and ')}`);
 
-			window.location.href    = APP_URL + '?' + aryParam.join('&');
+			window.location.href = APP_URL + '?' + aryParam.join('&');
 		},
 		onClear() {
 			this.inputInfo  = { '年代': [], '性別': [] };
