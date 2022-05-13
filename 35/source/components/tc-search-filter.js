@@ -74,7 +74,7 @@ Vue.component('tc-search-filter', {
 			
 			let aryUiQuery          = [];
 			for (let key in this.userInfo) {
-					if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
+				if (this.userInfo[key]) aryUiQuery.push(`${key} = ${this.userInfo[key]}`);
 			}
 
 			if (aryUiQuery.length) aryParam.push(`ui_query=${aryUiQuery.join(' and ')}`);
