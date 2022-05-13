@@ -238,10 +238,20 @@ Vue.component('tc-param', {
 				:holding-ticket="holdingTicket"
 			></tc-delivery-setting>
 
-			<tc-table
-				:is-admin="isAdmin"
-				:ary-record="aryRecord"
-			></tc-table>
+			<vue-good-table
+				class="mb-5"
+				:columns="aryColumn"
+				:rows="aryRecord"
+				:pagination-options="{
+					enabled: true,
+					position: 'both',
+					perPage: 100,
+					nextLabel: '次のページへ',
+					prevLabel: '前のページへ',
+					ofLabel: '/',
+					rowsPerPageLabel: 'ページ当たりの行数'
+				}"
+			></vue-good-table>
 		</div>
 	`
 });
