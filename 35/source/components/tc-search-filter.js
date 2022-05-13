@@ -96,9 +96,7 @@ Vue.component('tc-search-filter', {
 			style="margin-bottom: 24px;"
 		>
 			<!-- 見出し -->
-			<h2 class="py-2 px-5 d-inline-block text-white bg-secondary fw-bold rounded-pill">
-				ターゲット
-			</h2>
+			<h2 class="py-2 px-5 d-inline-block text-white bg-secondary fw-bold rounded-pill">ターゲット</h2>
 			<p>配信対象を絞り込む場合は以下の内容を設定して、「絞り込む」ボタンを押してください。</p>
 			<p class="m-0 text-secondary">※すべてAND条件で絞り込みます(例: 「男性」「30代」で絞り込んだ場合は、30代の男性のみがリスト表示されます)</p>
 
