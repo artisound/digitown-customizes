@@ -266,7 +266,7 @@ Vue.component("tc-param", {
      * @param {String} strQuery - 絞り込み条件文字列
      ********************************************************************* */
     getSepaText(strQuery) {
-      const seps = [ ' >= ', ' != ', '=', ' = ', ' in ', ' like ' ];
+      const seps = [ ' >= ', ' != ', ' = ', ' in ', ' like ' ];
       for (let sep of seps) if(strQuery.includes(sep)) return sep;
     },
 
@@ -289,7 +289,6 @@ Vue.component("tc-param", {
         let value = splits[1].replace(/\"/g, "");
 
         switch (sepaText) {
-          case "=":
           case " = ":
             if (Number(value)) value = Number(value);
             break;
@@ -298,7 +297,8 @@ Vue.component("tc-param", {
             value = value.match(/\((.+)\)/)[1].split(", ");
             break;
           default:
-            break;
+            // 条件に一致しない値はフォームに反映させたくないため
+            continue;
         }
 
         console.log('condition', param);
