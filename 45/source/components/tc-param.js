@@ -305,7 +305,7 @@ Vue.component("tc-param", {
         console.log('separator', sepaText);
         console.log('value', value);
 
-        inputForm[splits[0]] = value;
+        this.$set(inputForm, splits[0], value);
         console.groupEnd('paramsToForm'+i);
         i++;
       };

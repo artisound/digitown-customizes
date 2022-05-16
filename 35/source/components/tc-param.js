@@ -207,7 +207,7 @@ Vue.component('tc-param', {
 						continue;
 				}
 
-				inputData[splits[0]] = value;
+				this.$set(inputData, splits[0], value);
 			}
 		},
 	},
