@@ -16,7 +16,7 @@
                 "https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js",
                 "functions.js",
                 "35/source/components/tc-param.js",
-                "35/source/components/tc-search-filter.js",
+                "common/tc-search-filter.js",
                 "common/tc-header.js",
                 "35/source/components/tc-delivery-setting.js",
                 "35/dist/35.min.js"

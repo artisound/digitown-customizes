@@ -218,49 +218,6 @@ Vue.component("tc-param", {
     }
   },
   methods: {
-
-    /** *********************************************************************
-     * 管理者のみ表示する要素を制御
-     ********************************************************************* */
-    getJobEntryQuery(obj) {
-      console.group('getJobEntryQuery()');
-      const aryQuery = [];
-      for (const key in obj) {
-        const newValue = obj[key];
-
-        if (Array.isArray(newValue)) {
-          // ------------------------
-          // 配列
-          if (!newValue || newValue.length < 1) continue;
-          const objQuery = {};
-          for (const i in newValue) {
-            if( !objQuery[key] ) objQuery[key] = [];
-            objQuery[key].push(`"${newValue[i]}"`);
-          }
-
-          console.log('isArray', objQuery);
-          aryQuery.push(`${key} in (${objQuery[key].join(", ")})`);
-        } else {
-          // ------------------------
-          // 文字列
-          if (!newValue) continue;
-          if (newValue.length < 1) continue;
-          switch (key) {
-            case "開始日":
-              aryQuery.push(`${key} = "${newValue}"`);
-              break;
-            default:
-              aryQuery.push(`${key} in ("${newValue}")`);
-              break;
-          }
-        }
-      }
-      console.log('Queries', aryQuery);
-
-      console.groupEnd('getJobEntryQuery()');
-      return aryQuery.join(" and ");
-    },
-
     /** *********************************************************************
      * 絞り込み条件文字列から比較演算子を出力
      * @param {String} strQuery - 絞り込み条件文字列

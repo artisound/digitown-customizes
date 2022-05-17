@@ -14,7 +14,7 @@
                 "functions.js",
                 "45/source/components/tc-param.js",
                 "common/tc-header.js",
-                "45/source/components/tc-search-filter.js",
+                "common/tc-search-filter.js",
                 "45/source/components/tc-delivery-setting.js",
                 "45/source/js/kintone-ui-component.min.js",
                 "45/source/js/encoding.min.js",
