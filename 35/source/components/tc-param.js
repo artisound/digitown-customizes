@@ -20,6 +20,7 @@ Vue.component('tc-param', {
         性別: [],
 			},
 			userInfo: {},
+			kintoneUserCode: LOGIN_USER,
 			aryRecord: [],
 			year: lxnY,
 			isAdmin: false,
@@ -38,8 +39,11 @@ Vue.component('tc-param', {
 			column.push({ field: 'link', html: true });
 			if (this.isAdmin) column.push({ label: '表示名(Adminのみ)', field: '表示名.value' });
 
+			if (this.ssect == 'スカウト配信') {
+				column.push({ label: 'スカウト状態', field: 'スカウト状態.value' });
+			}
+
 			column.push(
-				{ label: 'スカウト状態',    field: 'スカウト状態.value' },
 				{ label: 'エントリー日',    field: 'エントリー日.value' },
 				{ label: '年齢',            field: '年齢.value', formatFn: (value => { return value + '歳'; }) },
 				{ label: '性別',            field: '性別.value' },
@@ -233,6 +237,10 @@ Vue.component('tc-param', {
 
 			<!-- 配信設定 -->
 			<tc-delivery-setting
+				:client="client"
+				:user="kintoneUserCode"
+				:group="group"
+				:ssect="ssect"
 				:scost="scost"
 				:ary-record="aryRecord"
 				:holding-ticket="holdingTicket"

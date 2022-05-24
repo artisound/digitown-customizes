@@ -2,6 +2,10 @@
 Vue.component('tc-delivery-setting', {
 	name: 'tc-delivery-setting',
 	props: {
+		client:					{ type: Object, default: {} },
+		user:						{ type: Number, default: 0 },
+		group:					{ type: String, default: '' },
+		ssect:					{ type: String, default: '' },
 		scost:					{ type: Number, default: 0 },
 		aryRecord:			{ type: Array, default: [] },
 		holdingTicket:	{ type: Number, default: 0 },
@@ -9,6 +13,31 @@ Vue.component('tc-delivery-setting', {
 	data() {
 		return {
 			isShowScout: true,
+			url: ''
+		}
+	},
+	watch: {
+		async group(newVal) {
+			const client = this.client;
+			/** ***********************************************************
+			// ポータルメニューマスターアプリからレコード取得
+			*********************************************************** */
+			const aryPortalMenu = await client.record.getAllRecords({
+				app:		97,
+				fields:	['グループ情報テーブル', 'グループ選択', 'メニュー情報テーブル']
+			}).then(resp => { return resp; }).catch(console.error);
+
+			const portalMenu	= aryPortalMenu.find(v => v['グループ選択']['value'][0]['name'] == newVal);
+			const tabs				= portalMenu['グループ情報テーブル']['value'];
+			const menuInfos		= portalMenu['メニュー情報テーブル']['value'];
+			const scoutTab		= tabs.find(v => v.value.グループ名.value == 'スカウトする');
+			const scoutMenu		= menuInfos.find(v => v['value']['親グループNo']['value'] == scoutTab['value']['グループNo']['value']);
+			this.url					= scoutMenu['value']['メニューURL']['value'];
+			this.isShowScout	= this.ssect == 'スカウト履歴';
+			const ssect				= this.ssect == 'スカウト履歴' ? 'スカウト配信' : 'スカウト履歴';
+
+			this.url += this.ssect == 'スカウト履歴' ? `&query=LINEユーザーID != "" and 年齢 >= 16` : `&query=スカウト履歴.有料会員アカウント関連付け in ( "${this.user}" )`;
+			this.url += `&ssect=${ssect}&scost=${this.scost}&officeGroup=${newVal}`;
 		}
 	},
 	template: `
@@ -44,7 +73,7 @@ Vue.component('tc-delivery-setting', {
 
 					<!-- 配信対象情報等 -->
 					<div class="pt-3">
-						<a href="#">スカウト{{ isShowScout ? '対象' : '履歴' }}を表示する</a>
+						<a :href="url" class="d-inline-block border p-2 bg-primary text-white">スカウト{{ isShowScout ? '対象' : '履歴' }}を表示する</a>
 						<p>エントリーの詳細情報を確認またはスカウトする場合は対象のエントリー者の行をクリックして詳細情報を開いてください。</p>
 					</div>
 				</div>
