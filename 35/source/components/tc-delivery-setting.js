@@ -8,7 +8,7 @@ Vue.component('tc-delivery-setting', {
 	},
 	data() {
 		return {
-			isShowScount: true,
+			isShowScout: true,
 		}
 	},
 	template: `
@@ -44,14 +44,7 @@ Vue.component('tc-delivery-setting', {
 
 					<!-- 配信対象情報等 -->
 					<div class="pt-3">
-						<div>
-							<input
-								v-model="isShowScount"
-								id="isShowScount"
-								type="checkbox"
-							>
-							<label for="isShowScount">スカウトした内容を表示する</label>
-						</div>
+						<a href="#">スカウト{{ isShowScout ? '対象' : '履歴' }}を表示する</a>
 						<p>エントリーの詳細情報を確認またはスカウトする場合は対象のエントリー者の行をクリックして詳細情報を開いてください。</p>
 					</div>
 				</div>
