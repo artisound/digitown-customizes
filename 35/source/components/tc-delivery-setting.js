@@ -34,7 +34,7 @@ Vue.component('tc-delivery-setting', {
 			const scoutMenu		= menuInfos.find(v => v['value']['親グループNo']['value'] == scoutTab['value']['グループNo']['value']);
 			this.url					= scoutMenu['value']['メニューURL']['value'];
 			this.isShowScout	= this.ssect == 'スカウト履歴';
-			const ssect				= this.ssect == 'スカウト履歴' ? 'スカウト配信' : 'スカウト履歴';
+			const ssect				= this.ssect == 'スカウト履歴' ? scoutMenu['value']['URLパラメータ']['value'] : 'スカウト履歴';
 
 			this.url += this.ssect == 'スカウト履歴' ? `&query=LINEユーザーID != "" and 年齢 >= 16` : `&query=スカウト履歴.有料会員アカウント関連付け in ( "${this.user}" )`;
 			this.url += `&ssect=${ssect}&scost=${this.scost}&officeGroup=${newVal}`;
