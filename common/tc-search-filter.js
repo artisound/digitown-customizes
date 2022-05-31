@@ -31,6 +31,8 @@ Vue.component('tc-search-filter', {
       aryEmploymentStatus: [ "アルバイト・パート", "日雇い", "臨時（季節雇用）", "正社員", "契約社員", "派遣社員", "請負", "業務委託", "その他" ],
       // 曜日一覧
       aryDay: ["月", "火", "水", "木", "金", "土", "日", "祝"],
+
+      isNotInput: false,
     }
   },
   mounted: async function() {
@@ -47,6 +49,8 @@ Vue.component('tc-search-filter', {
       action: "get",
       table: "dt1_city_master",
     });
+
+    this.isNotInput = getParam('isNotInput');
     console.groupEnd('tc-search-filter');
   },
   computed: {
@@ -173,6 +177,24 @@ Vue.component('tc-search-filter', {
       return aryQuery.join(" and ");
     },
     userInfoSearch() {
+      if (this.isNotInput) {
+        const query = encodeURI(_getQueryText({}, [ 'LINEユーザーID != ""', '友達状態 in ("友だち")', '誕生年 = 0', '誕生月 = 0', '誕生日 = 0']));
+        const aryParam = [];
+        if (this.ssect && this.scost && this.group) {
+          const addParam = {
+            view: VIEW_ID,
+            query: query,
+            ssect: this.ssect,
+            scost: this.scost,
+            officeGroup: this.group
+          };
+
+          for (const param in addParam) aryParam.push(`${param}=${addParam[param]}`);
+        }
+
+        window.location.href = `${APP_URL}?${aryParam.join('&')}&isNotInput=${this.isNotInput}`;
+        return;
+      }
       // スカウトステータス更新
       let isScout = false;
       if (this.ssect.includes("求人")) {
@@ -485,6 +507,10 @@ Vue.component('tc-search-filter', {
 
     <!-- ボタン -->
     <div class="d-flex align-items-center p-2">
+      <v-checkbox
+        v-model="isNotInput"
+        label="属性み入力"
+      ></v-checkbox>
       <v-spacer></v-spacer>
       <!-- 検索条件クリアボタン -->
       <v-btn

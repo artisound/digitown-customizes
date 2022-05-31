@@ -247,6 +247,9 @@ Vue.component("tc-param", {
 
         switch (sepaText) {
           case " = ":
+            if (splits[0] == '誕生年' || splits[0] =='誕生月' || splits[0] == '誕生日') {
+              if (Number(value) < 1) continue;
+            }
             if (Number(value)) value = Number(value);
             break;
           case " in ":
