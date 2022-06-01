@@ -289,6 +289,7 @@ Vue.component("tc-param", {
 
     <!-- 絞り込み -->
     <tc-search-filter
+      v-if="!ssect.includes('一斉配信')"
       :group="group"
       :ssect="ssect"
       :scost="scost"
