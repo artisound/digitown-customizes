@@ -212,6 +212,13 @@ Vue.component("tc-param", {
           return record;
         });
 
+        if (je_query) {
+          this.aryRecord = this.aryRecord.filter(record => {
+            const matchRec = aryJobEntry.find(v => v.LINEユーザーID.value == record.LINEユーザーID.value);
+            if (matchRec) return record;
+          });
+        }
+
         // 絞り込み条件をフォームに反映させる
         this.paramsToForm(je_query, this.jobEntryInfo);
       }
