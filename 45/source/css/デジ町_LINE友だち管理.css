@@ -7,6 +7,6 @@ table tr:nth-child(odd) td {
   background: #fff6f6;
 }
 
-.container-gaia {
+html {
   overflow-x: scroll;
 }
