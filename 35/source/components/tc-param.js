@@ -174,6 +174,24 @@ Vue.component('tc-param', {
 			return record.link = `<div class="text-center"><a href="https://digital-town.cybozu.com/k/${APP_ID}/show#record=${record.$id.value}&ssect=${this.ssect}&scost=${this.scost}&group=${this.group}&officeInfoRecId=${this.officeInfoRecId}" class="d-inline-block border border-1 border-primary rounded py-2 px-3">詳細を見る</a></div>`;
 		});
 
+		// TC社員
+		if (!this.isAdmin) {
+
+			const adminRecords = [
+				'U377a75b2e72a676753dc253c765416cf',
+				'Uaca4df0e661c0d159052b9438f42f689',
+				'U401c9d802cc20884f3b4cf4baf22a0a1', // タイムコンシェル秘書
+				'Udfb9c783ed22b62f82341103fed70465',
+				'Ub0141028dfb30809aeafc792a7676a09',
+				'U0f3f6a565cc72a09ae06c5cb3f54c837'
+			]
+
+			// TC社員をはじく
+			this.aryRecord = this.aryRecord.filter(record => {
+				return !adminRecords.find(v => v.includes(record['LINEユーザーID']['value']))
+			})
+		}
+
 		// 絞り込み条件をフォームに反映させる
 		this.paramsToForm(getParam('query'), this.inputInfo);
 		this.paramsToForm(getParam('ui_query'), this.userInfo);
