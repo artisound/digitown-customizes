@@ -8,6 +8,7 @@ Vue.component('tc-search-filter', {
 		inputInfo: { type: Object, default: {} },
 		userInfo: { type: Object, default: {} },
     jobEntryInfo: { type: Object,  default: {} },
+    inboxCategory: { type: Array, default: [] }
   },
   data() {
     return {
@@ -33,6 +34,20 @@ Vue.component('tc-search-filter', {
       aryDay: ["月", "火", "水", "木", "金", "土", "日", "祝"],
 
       isNotInput: false,
+    }
+  },
+  watch: {
+    inputInfo: {
+      handler(aft) {
+        // 受信設定のチェックを反映させる
+        this.inboxCategory.forEach(category => {
+          category.subCategory.forEach((sub, index) => {
+            const result = aft[category.fieldCode].find(v => v === sub.title)
+            if (result) sub.checked = true
+          })
+        })
+      },
+      deep: true
     }
   },
   mounted: async function() {
@@ -94,6 +109,15 @@ Vue.component('tc-search-filter', {
      * 検索ボタンが押された時の処理
      ********************************************************************* */
     onSearch() {
+      // 配列の添え字を受信設定のカテゴリに変換する
+      this.inboxCategory.forEach(category => {
+        category.subCategory.forEach(sub => {
+          if (sub.checked) {
+            this.inputInfo[category.fieldCode].push(sub.title)
+          }
+        })
+      })
+
       if (APP_ID == 35) {
         this.jobSearch();
       } else if (APP_ID == 45) {
@@ -390,6 +414,35 @@ Vue.component('tc-search-filter', {
             hide-details="auto"
           ></v-select>
         </v-form>
+      </div>
+    </div>
+
+    <!-- 受信設定で絞り込む -->
+    <div class="border rounded mb-3 py-2 px-3 bg-white">
+      <!-- 見出し -->
+      <h2 class="fw-bold m-0 mb-2">受信設定で絞り込む</h2>
+
+      <!-- 条件 -->
+      <div class="d-flex flex-wrap gap-3">
+        <template v-for="(category, index) in inboxCategory">
+          <fieldset
+            class="rounded-2 mt-n2 pt-0 pb-2 border"
+          >
+            <legend><span>{{ category.title }}</span></legend>
+            <v-chip-group
+              :key="'category' + index"
+              multiple
+              active-class="primary--text"
+            >
+              <template v-for="(sub, subIndex) in category.subCategory">
+                <v-chip
+                  :key="'sub-category' + index"
+                  v-model="sub.checked"
+                >{{ sub.title }}</v-chip>
+              </template>
+            </v-chip-group>
+          </fieldset>
+        </template>
       </div>
     </div>
 

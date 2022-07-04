@@ -41,6 +41,41 @@ Vue.component("tc-param", {
       holdingTicket  : 0,
       officeInfoRecId: 0,
       officeName     : "",
+      inboxCategory: [
+        {
+          title: 'みんなのまち情報',
+          fieldCode: '_受信カテゴリ_みんなのまち情報',
+          subCategory: [
+            { title: 'イベント情報', checked: false },
+            { title: 'クーポン情報', checked: false },
+            { title: '記事情報', checked: false}
+          ]
+        },
+        {
+          title: 'お仕事情報',
+          fieldCode: '_受信カテゴリ_お仕事情報',
+          subCategory: [
+            { title: '求人情報配信', checked: false }
+          ]
+        },
+        {
+          title: '公の情報',
+          fieldCode: '_受信カテゴリ_公の情報',
+          subCategory: [
+            { title: '知らないの？それ損してますよ！情報', checked: false },
+            { title: 'ニュース', checked: false },
+            { title: '地元情報', checked: false }
+          ]
+        },
+        {
+          title: 'そろそろ通知',
+          fieldCode: '_受信カテゴリ_そろそろ通知',
+          subCategory: [
+            { title: '記念日通知', checked: false },
+            { title: '行政サービス勝手に配信', checked: false }
+          ]
+        }
+      ],
     }
   },
   computed: {
@@ -90,6 +125,11 @@ Vue.component("tc-param", {
     },
   },
   mounted: async function() {
+    // 受信設定の配列を作成する
+    this.inboxCategory.forEach(category => {
+      this.$set(this.inputInfo, category.fieldCode, [])
+    })
+
     // kintone Rest API Client
     const client = this.client;
 
@@ -302,6 +342,7 @@ Vue.component("tc-param", {
       :scost="scost"
       :input-info="inputInfo"
       :job-entry-info="jobEntryInfo"
+      :inbox-category="inboxCategory"
     ></tc-search-filter>
 
     <!-- 配信設定 -->
