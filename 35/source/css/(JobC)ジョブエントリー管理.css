@@ -6,3 +6,7 @@ h1 {
 table tr:nth-child(odd) td {
     background: #fff6f6;
 }
+
+html {
+    overflow-x: scroll;
+}
