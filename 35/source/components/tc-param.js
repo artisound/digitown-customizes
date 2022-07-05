@@ -213,8 +213,6 @@ Vue.component('tc-param', {
 			})
 		}
 
-		console.log(this.aryRecord)
-
 		// 絞り込み条件をフォームに反映させる
 		this.paramsToForm(getParam('query'), this.inputInfo);
 		this.paramsToForm(getParam('ui_query'), this.userInfo);
