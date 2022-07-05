@@ -14,3 +14,7 @@ html {
 th, td {
     min-width: 120px;
 }
+
+.vgt-responsive {
+    overflow-x: visible;
+}
