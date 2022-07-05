@@ -44,19 +44,40 @@ Vue.component('tc-param', {
 			}
 
 			column.push(
-				{ label: 'エントリー日',    field: 'エントリー日.value' },
-				{ label: '年齢',            field: '年齢.value', formatFn: (value => { return value + '歳'; }) },
-				{ label: '性別',            field: '性別.value' },
-				{ label: '市区町村',        field: '市名.value' },
-				{ label: '希望勤務地',      field: '勤務地.value' },
-				{ label: '希望契約形態',    field: '契約形態.value' },
-				{ label: '希望勤務開始日',  field: '開始日.value' },
-				{ label: '希望勤務終了日',  field: '終了日.value', },
-				{ label: '希望曜日',        field: '曜日.value', },
-				{ label: '希望職種',        field: '希望職種.value' },
-				{ label: '希望詳細職種',    field: '希望詳細職種.value' },
-				// { label: '希望業種',        field: '希望業種.value' },
-				// { label: '希望詳細業種',    field: '希望詳細業種.value' }
+				{ label: '性別'										, field: '性別.value' },
+				{ label: '年齢'										, field: '年齢.value', formatFn: (value => { return value + '歳'; }) },
+				{ label: '郵便番号'								, field: '郵便番号.value' },
+				{ label: '都道府県名'							, field: '都道府県名.value' },
+				{ label: '市名'										, field: '市名.value' },
+				{ label: 'エントリー日'						, field: 'エントリー日.value' },
+				{ label: '市区町村'								, field: '市名.value' },
+				{ label: '勤務地'									, field: '勤務地.value' },
+				{ label: '契約形態'								, field: '契約形態.value' },
+				{ label: '副業・Wワーク'					, field: '副業_Wワーク.value' },
+				{ label: 'リモートワーク'					, field: 'リモートワーク.value' },
+				{ label: '残業'										, field: '残業.value' },
+				{ label: '希望給与'								, field: '希望給与.value' },
+				{ label: '希望額'									, field: '希望額.value' },
+				{ label: '開始日'									, field: '開始日.value' },
+				{ label: '勤務終了日指定'					, field: '勤務終了日指定.value' },
+				{ label: '終了日'									, field: '終了日.value', },
+				{ label: '時間帯'									, field: '時間帯.value', },
+				{ label: '希望業務開始時間'				, field: '希望業務開始時間.value', },
+				{ label: '希望業務終了時間'				, field: '希望業務終了時間.value', },
+				{ label: '曜日指定'								, field: '曜日指定.value', },
+				{ label: '曜日'										, field: '曜日.value', },
+				{ label: '求人情報配信'						, field: '求人情報配信.value', },
+				{ label: '希望職種'								, field: '希望職種.value' },
+				{ label: '希望詳細職種'						, field: '希望詳細職種.value' },
+				{ label: 'その他の希望詳細職種'		, field: 'その他の希望詳細職種.value' },
+				{ label: '希望業種'								, field: '希望業種.value' },
+				{ label: '希望詳細業種'						, field: '希望詳細業種.value' },
+				{ label: 'その他の希望詳細業種'		, field: 'その他の希望詳細業種.value' },
+				{ label: '経験職種・年数'					, field: '経験職種_年数.value' },
+				{ label: '免許・資格・スキルなど'	, field: '免許_資格_スキルなど.value' },
+				{ label: '語学'										, field: '語学.value' },
+				{ label: '自己PR'									, field: '自己PR.value' },
+				{ label: '希望事項'								, field: '希望事項.value' },
 			);
 
 			return column;
@@ -191,6 +212,8 @@ Vue.component('tc-param', {
 				return !adminRecords.find(v => v.includes(record['LINEユーザーID']['value']))
 			})
 		}
+
+		console.log(this.aryRecord)
 
 		// 絞り込み条件をフォームに反映させる
 		this.paramsToForm(getParam('query'), this.inputInfo);
