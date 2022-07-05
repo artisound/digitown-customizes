@@ -213,6 +213,52 @@ Vue.component('tc-param', {
 			})
 		}
 
+		this.aryRecord.forEach(record => {
+			for (const key in record) {
+				if (!Array.isArray(record[key].value)) continue;
+
+				switch(key) {
+					case '副業_Wワーク':
+					case 'リモートワーク':
+						record[key].value = record[key].value.length ? record[key].value[0] : ''
+						break;
+					case '経験職種_年数':
+						let texts = [];
+						for (const subkey in record[key]) {
+							if (subkey !== 'value') continue;
+
+							record[key][subkey].forEach(r => {
+								for (const valKey in r) {
+									if (valKey !== 'value') continue;
+									const val = r[valKey];
+									texts.push(`${val['経験職種']['value']}: ${val['年数']['value']}年`);
+								}
+							})
+						}
+						record[key].value = texts.join(',');
+						break;
+					case '免許_資格_スキルなど':
+						let licenses = [];
+						for (const subkey in record[key]) {
+							if (subkey !== 'value') continue;
+							record[key][subkey].forEach(r => {
+								licenses.push(r['value']['免許_資格_スキル']['value'])
+							})
+						}
+
+						record[key].value = licenses.join(',')
+						break;
+					case '語学':
+						let languege = [];
+						record[key].value.forEach(r => {
+							languege.push(`${r['value']['言語']['value']}: ${r['value']['習得レベル']['value']}`);
+						})
+						record[key].value = languege.join(',')
+						break;
+				}
+			}
+		})
+
 		// 絞り込み条件をフォームに反映させる
 		this.paramsToForm(getParam('query'), this.inputInfo);
 		this.paramsToForm(getParam('ui_query'), this.userInfo);
