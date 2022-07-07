@@ -1,36 +1,36 @@
 /* eslint-disable strict */
-const VIEW_ID           = 5789206;                                          // アプリのビューID
-const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
-const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
-const LOGIN_USER        = kintone.getLoginUser()['code'];                   // kintoneのログインユーザー
-const appId_user        = 45;                                               // LINE友だち管理
-const appId_scout       = 33;                                               // スカウト
-const office_info       = 28
-const lxn               = luxon.DateTime.fromJSDate(new Date());
-const lxnY              = lxn.toFormat('yyyy');
+const VIEW_ID			= 5789206;                                          // アプリのビューID
+const SUB_DOMAIN	= "digital-town";                                   // サブドメイン
+const APP_URL			= `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
+const LOGIN_USER	= kintone.getLoginUser()['code'];                   // kintoneのログインユーザー
+const appId_user	= 45;                                               // LINE友だち管理
+const appId_scout	= 33;                                               // スカウト
+const office_info	= 28
+const lxn					= luxon.DateTime.fromJSDate(new Date());
+const lxnY				= lxn.toFormat('yyyy');
 Vue.component('tc-param', {
-	name: 'tc-param',
-	props: ['client'],
+	name	: 'tc-param',
+	props	: ['client'],
 	data() {
 		return {
-			inputInfo   : {
+			inputInfo: {
         // 検索で条件に指定された項目一覧
         // 年代と性別は配列を用意しておかないとチェックボックスの結果を受け取れない
         年代: [],
         性別: [],
 			},
-			userInfo: {},
-			kintoneUserCode: LOGIN_USER,
-			aryRecord: [],
-			year: lxnY,
-			isAdmin: false,
-			isAdminOpen: false,
-			group: '',
-			ssect: '',
-			scost: 0,
-			officeInfoRecId: 0,
-			officeName: '',
-			holdingTicket: 0,
+			userInfo				: {},
+			kintoneUserCode	: LOGIN_USER,
+			aryRecord				: [],
+			year						: lxnY,
+			isAdmin					: false,
+			isAdminOpen			: false,
+			group						: '',
+			ssect						: '',
+			scost						: 0,
+			officeInfoRecId	: 0,
+			officeName			: '',
+			holdingTicket		: 0,
 		}
 	},
 	computed: {
@@ -90,15 +90,15 @@ Vue.component('tc-param', {
 			}
 		},
 		"inputInfo.郵便番号"(newVal) {
-			let zipcode = insertHyphenForZipcode(newVal);
+			let zipcode							= insertHyphenForZipcode(newVal);
 			this.inputInfo.郵便番号 = zipcode;
 		}
 	},
 	async mounted() {
 		const client = this.client;
 		// カスタマイズ一覧の選択等を非表示にする
-		const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];
-		el.style.display = 'none';
+		const el					= document.getElementsByClassName('contents-actionmenu-gaia')[0];
+		el.style.display	= 'none';
 
 		this.ssect = getParam('ssect');
 		this.scost = Number(getParam('scost'));
@@ -118,9 +118,9 @@ Vue.component('tc-param', {
     // --------------------------------------------------------
     // LINE友だち管理からレコード取得用パラメータ
 		const objUserInfoParam = {
-			app:    appId_user,
-			condition:  'LINEユーザーID != "" and 友達状態 in ("友だち") and 年齢_年_ >= 16',
-			fields: ['レコード番号', 'LINEユーザーID', '表示名', '誕生年', '誕生月']
+			app				: appId_user,
+			condition	: 'LINEユーザーID != "" and 友達状態 in ("友だち") and 年齢_年_ >= 16',
+			fields		: ['レコード番号', 'LINEユーザーID', '表示名', '誕生年', '誕生月']
 		};
 		if(getParam('ui_query')) objUserInfoParam.condition += ' and ' + getParam('ui_query');
 
@@ -130,9 +130,9 @@ Vue.component('tc-param', {
 		  // 事業所管理からレコードを取得する
       // ******************************************************************************************************************************
       client.record.getAllRecords({
-        app:				office_info,
-        condition:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
-        fields:			['レコード番号', '事業所名', '残高']
+        app				: office_info,
+        condition	: `有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
+        fields		: ['レコード番号', '事業所名', '残高']
       }).then(resp => { return resp; }).catch(console.error),
 
       // ******************************************************************************************************************************
@@ -144,8 +144,8 @@ Vue.component('tc-param', {
 		  // ジョブエントリーからレコードを取得する
       // ******************************************************************************************************************************
       client.record.getRecords({
-        app: APP_ID,
-        query: `${getParam("query")}`
+        app		: APP_ID,
+        query	: `${getParam("query")}`
         // query: `${getParam("query")} limit 500 offset 0`
       }).then(async resp => {
         return resp;
@@ -178,9 +178,9 @@ Vue.component('tc-param', {
 
 		// スカウト情報を取得する
 		const objScoutParam = {
-			app:    appId_scout,
-			condition:  'LINEユーザーID != ""',
-			fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
+			app				: appId_scout,
+			condition : 'LINEユーザーID != ""',
+			fields		: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
 		};
 
 		const aryScout = await client.record.getAllRecords(objScoutParam);
@@ -263,10 +263,10 @@ Vue.component('tc-param', {
 			if (!params) return;
 			const sepaParams = params.split(' and ');
 			for (const param of sepaParams) {
-				const sepaText = this.getSepaText(param);
-				const splits = param.split(sepaText);
-				let value = splits[1];
-				value = value.replaceAll('"', '');
+				const sepaText	= this.getSepaText(param);
+				const splits		= param.split(sepaText);
+				let value				= splits[1];
+				value						= value.replaceAll('"', '');
 
 				switch (sepaText) {
 					case ' = ':
