@@ -25,18 +25,20 @@ Vue.component('tc-delivery-setting', {
       if (this.scost <= 0) return targets;
 
       // 配信対象の人数の選択項目を作成する
-      const maxTargetLength = 500 / this.scost;
+      const maxTargetLength = this.aryRecord.length / this.scost;
 
       for (let i = 0; i <= maxTargetLength; i++) {
         const targetCount = i * this.scost;
-        // console.log(targetCount);
-        // 1度で配信できるのは1000人まで
         if (targetCount > 0 && targetCount >= this.aryRecord.length) {
           targets.push({ text: "全員", value: this.aryRecord.length });
           break;
         }
 
         targets.push({ text: `${targetCount}人`, value: targetCount });
+      }
+
+      if (this.aryRecord.length % this.scost) {
+        targets.push({ text: '全員', value: this.aryRecord.length });
       }
 
       return targets;

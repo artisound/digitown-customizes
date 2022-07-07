@@ -1,36 +1,36 @@
 /* eslint-disable strict */
-const VIEW_ID           = 5789206;                                          // アプリのビューID
-const SUB_DOMAIN        = "digital-town";                                   // サブドメイン
-const APP_URL           = `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
-const LOGIN_USER        = kintone.getLoginUser()['code'];                   // kintoneのログインユーザー
-const appId_user        = 45;                                               // LINE友だち管理
-const appId_scout       = 33;                                               // スカウト
-const office_info       = 28
-const lxn               = luxon.DateTime.fromJSDate(new Date());
-const lxnY              = lxn.toFormat('yyyy');
+const VIEW_ID			= 5789206;                                          // アプリのビューID
+const SUB_DOMAIN	= "digital-town";                                   // サブドメイン
+const APP_URL			= `https://${SUB_DOMAIN}.cybozu.com/k/${APP_ID}/`;  // アプリのURL
+const LOGIN_USER	= kintone.getLoginUser()['code'];                   // kintoneのログインユーザー
+const appId_user	= 45;                                               // LINE友だち管理
+const appId_scout	= 33;                                               // スカウト
+const office_info	= 28
+const lxn					= luxon.DateTime.fromJSDate(new Date());
+const lxnY				= lxn.toFormat('yyyy');
 Vue.component('tc-param', {
-	name: 'tc-param',
-	props: ['client'],
+	name	: 'tc-param',
+	props	: ['client'],
 	data() {
 		return {
-			inputInfo   : {
+			inputInfo: {
         // 検索で条件に指定された項目一覧
         // 年代と性別は配列を用意しておかないとチェックボックスの結果を受け取れない
         年代: [],
         性別: [],
 			},
-			userInfo: {},
-			kintoneUserCode: LOGIN_USER,
-			aryRecord: [],
-			year: lxnY,
-			isAdmin: false,
-			isAdminOpen: false,
-			group: '',
-			ssect: '',
-			scost: 0,
-			officeInfoRecId: 0,
-			officeName: '',
-			holdingTicket: 0,
+			userInfo				: {},
+			kintoneUserCode	: LOGIN_USER,
+			aryRecord				: [],
+			year						: lxnY,
+			isAdmin					: false,
+			isAdminOpen			: false,
+			group						: '',
+			ssect						: '',
+			scost						: 0,
+			officeInfoRecId	: 0,
+			officeName			: '',
+			holdingTicket		: 0,
 		}
 	},
 	computed: {
@@ -44,19 +44,40 @@ Vue.component('tc-param', {
 			}
 
 			column.push(
-				{ label: 'エントリー日',    field: 'エントリー日.value' },
-				{ label: '年齢',            field: '年齢.value', formatFn: (value => { return value + '歳'; }) },
-				{ label: '性別',            field: '性別.value' },
-				{ label: '市区町村',        field: '市名.value' },
-				{ label: '希望勤務地',      field: '勤務地.value' },
-				{ label: '希望契約形態',    field: '契約形態.value' },
-				{ label: '希望勤務開始日',  field: '開始日.value' },
-				{ label: '希望勤務終了日',  field: '終了日.value', },
-				{ label: '希望曜日',        field: '曜日.value', },
-				{ label: '希望職種',        field: '希望職種.value' },
-				{ label: '希望詳細職種',    field: '希望詳細職種.value' },
-				// { label: '希望業種',        field: '希望業種.value' },
-				// { label: '希望詳細業種',    field: '希望詳細業種.value' }
+				{ label: '性別'										, field: '性別.value' },
+				{ label: '年齢'										, field: '年齢.value', formatFn: (value => { return value + '歳'; }) },
+				{ label: '郵便番号'								, field: '郵便番号.value' },
+				{ label: '都道府県名'							, field: '都道府県名.value' },
+				{ label: '市名'										, field: '市名.value' },
+				{ label: 'エントリー日'						, field: 'エントリー日.value' },
+				{ label: '市区町村'								, field: '市名.value' },
+				{ label: '勤務地'									, field: '勤務地.value' },
+				{ label: '契約形態'								, field: '契約形態.value' },
+				{ label: '副業・Wワーク'					, field: '副業_Wワーク.value' },
+				{ label: 'リモートワーク'					, field: 'リモートワーク.value' },
+				{ label: '残業'										, field: '残業.value' },
+				{ label: '希望給与'								, field: '希望給与.value' },
+				{ label: '希望額'									, field: '希望額.value' },
+				{ label: '開始日'									, field: '開始日.value' },
+				{ label: '勤務終了日指定'					, field: '勤務終了日指定.value' },
+				{ label: '終了日'									, field: '終了日.value', },
+				{ label: '時間帯'									, field: '時間帯.value', },
+				{ label: '希望業務開始時間'				, field: '希望業務開始時間.value', },
+				{ label: '希望業務終了時間'				, field: '希望業務終了時間.value', },
+				{ label: '曜日指定'								, field: '曜日指定.value', },
+				{ label: '曜日'										, field: '曜日.value', },
+				{ label: '求人情報配信'						, field: '求人情報配信.value', },
+				{ label: '希望職種'								, field: '希望職種.value' },
+				{ label: '希望詳細職種'						, field: '希望詳細職種.value' },
+				{ label: 'その他の希望詳細職種'		, field: 'その他の希望詳細職種.value' },
+				{ label: '希望業種'								, field: '希望業種.value' },
+				{ label: '希望詳細業種'						, field: '希望詳細業種.value' },
+				{ label: 'その他の希望詳細業種'		, field: 'その他の希望詳細業種.value' },
+				{ label: '経験職種・年数'					, field: '経験職種_年数.value' },
+				{ label: '免許・資格・スキルなど'	, field: '免許_資格_スキルなど.value' },
+				{ label: '語学'										, field: '語学.value' },
+				{ label: '自己PR'									, field: '自己PR.value' },
+				{ label: '希望事項'								, field: '希望事項.value' },
 			);
 
 			return column;
@@ -69,15 +90,15 @@ Vue.component('tc-param', {
 			}
 		},
 		"inputInfo.郵便番号"(newVal) {
-			let zipcode = insertHyphenForZipcode(newVal);
+			let zipcode							= insertHyphenForZipcode(newVal);
 			this.inputInfo.郵便番号 = zipcode;
 		}
 	},
 	async mounted() {
 		const client = this.client;
 		// カスタマイズ一覧の選択等を非表示にする
-		const el = document.getElementsByClassName('contents-actionmenu-gaia')[0];
-		el.style.display = 'none';
+		const el					= document.getElementsByClassName('contents-actionmenu-gaia')[0];
+		el.style.display	= 'none';
 
 		this.ssect = getParam('ssect');
 		this.scost = Number(getParam('scost'));
@@ -97,9 +118,9 @@ Vue.component('tc-param', {
     // --------------------------------------------------------
     // LINE友だち管理からレコード取得用パラメータ
 		const objUserInfoParam = {
-			app:    appId_user,
-			condition:  'LINEユーザーID != "" and 友達状態 in ("友だち") and 年齢_年_ >= 16',
-			fields: ['レコード番号', 'LINEユーザーID', '表示名', '誕生年', '誕生月']
+			app				: appId_user,
+			condition	: 'LINEユーザーID != "" and 友達状態 in ("友だち") and 年齢_年_ >= 16',
+			fields		: ['レコード番号', 'LINEユーザーID', '表示名', '誕生年', '誕生月']
 		};
 		if(getParam('ui_query')) objUserInfoParam.condition += ' and ' + getParam('ui_query');
 
@@ -109,9 +130,9 @@ Vue.component('tc-param', {
 		  // 事業所管理からレコードを取得する
       // ******************************************************************************************************************************
       client.record.getAllRecords({
-        app:				office_info,
-        condition:	`有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
-        fields:			['レコード番号', '事業所名', '残高']
+        app				: office_info,
+        condition	: `有料会員アカウント関連付け in ( "${LOGIN_USER}" )`,
+        fields		: ['レコード番号', '事業所名', '残高']
       }).then(resp => { return resp; }).catch(console.error),
 
       // ******************************************************************************************************************************
@@ -123,8 +144,8 @@ Vue.component('tc-param', {
 		  // ジョブエントリーからレコードを取得する
       // ******************************************************************************************************************************
       client.record.getRecords({
-        app: APP_ID,
-        query: `${getParam("query")}`
+        app		: APP_ID,
+        query	: `${getParam("query")}`
         // query: `${getParam("query")} limit 500 offset 0`
       }).then(async resp => {
         return resp;
@@ -157,9 +178,9 @@ Vue.component('tc-param', {
 
 		// スカウト情報を取得する
 		const objScoutParam = {
-			app:    appId_scout,
-			condition:  'LINEユーザーID != ""',
-			fields: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
+			app				: appId_scout,
+			condition : 'LINEユーザーID != ""',
+			fields		: ['レコード番号', 'LINEユーザーID', 'スカウト状態']
 		};
 
 		const aryScout = await client.record.getAllRecords(objScoutParam);
@@ -192,6 +213,43 @@ Vue.component('tc-param', {
 			})
 		}
 
+		this.aryRecord.forEach(record => {
+			for (const key in record) {
+				if (!Array.isArray(record[key].value)) continue;
+
+				switch(key) {
+					case '副業_Wワーク':
+					case 'リモートワーク':
+						record[key].value = record[key].value.length ? record[key].value[0] : ''
+						break;
+					case '経験職種_年数':
+						let texts = [];
+						record[key].value.forEach(r => {
+							const val = r.value;
+							texts.push(`${val['経験職種']['value']}: ${val['年数']['value']}年`);
+						})
+						record[key].value = texts.join(',');
+						break;
+					case '免許_資格_スキルなど':
+						let licenses = [];
+						record[key].value.forEach(r => {
+							licenses.push(r['value']['免許_資格_スキル']['value'])
+						})
+
+						record[key].value = licenses.join(',\n')
+						break;
+					case '語学':
+						let languege = [];
+						record[key].value.forEach(r => {
+							const val = r.value
+							languege.push(`${val['言語']['value']}: ${val['習得レベル']['value']}`);
+						})
+						record[key].value = languege.join(',')
+						break;
+				}
+			}
+		})
+
 		// 絞り込み条件をフォームに反映させる
 		this.paramsToForm(getParam('query'), this.inputInfo);
 		this.paramsToForm(getParam('ui_query'), this.userInfo);
@@ -205,10 +263,10 @@ Vue.component('tc-param', {
 			if (!params) return;
 			const sepaParams = params.split(' and ');
 			for (const param of sepaParams) {
-				const sepaText = this.getSepaText(param);
-				const splits = param.split(sepaText);
-				let value = splits[1];
-				value = value.replaceAll('"', '');
+				const sepaText	= this.getSepaText(param);
+				const splits		= param.split(sepaText);
+				let value				= splits[1];
+				value						= value.replaceAll('"', '');
 
 				switch (sepaText) {
 					case ' = ':

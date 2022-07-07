@@ -7,7 +7,7 @@ Vue.component('tc-delivery-setting', {
 		group:					{ type: String, default: '' },
 		ssect:					{ type: String, default: '' },
 		scost:					{ type: Number, default: 0 },
-		aryRecord:			{ type: Array, default: [] },
+		aryRecord:			{ type: Array,	default: [] },
 		holdingTicket:	{ type: Number, default: 0 },
 	},
 	data() {

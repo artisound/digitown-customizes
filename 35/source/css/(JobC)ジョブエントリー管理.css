@@ -10,3 +10,11 @@ table tr:nth-child(odd) td {
 html {
     overflow-x: scroll;
 }
+
+th, td {
+    min-width: 120px;
+}
+
+.vgt-responsive {
+    overflow-x: visible;
+}

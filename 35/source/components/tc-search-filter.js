@@ -2,24 +2,24 @@
 Vue.component('tc-search-filter', {
 	name: 'tc-search-filter',
 	props: {
-		group: { type: String,  default: '' },
-		ssect: { type: String,  default: '' },
-		scost: { type: Number,  default: 0 },
-		inputInfo: { type: Object, default: {} },
-		userInfo: { type: Object, default: {} },
+		group			: { type: String,  	default: '' },
+		ssect			: { type: String,  	default: '' },
+		scost			: { type: Number,  	default: 0 },
+		inputInfo	: { type: Object,		default: {} },
+		userInfo	: { type: Object,		default: {} },
 	},
 	data() {
 		return {
-			year: dayjs().format('YYYY'),
-			aryGender: [ "男性", "女性" ],
-			aryAge: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
-			aryCity: [],
+			year								: dayjs().format('YYYY'),
+			aryGender						: [ "男性", "女性" ],
+			aryAge							: [ "10代", "20代", "30代", "40代", "50代", "60代", "70代", "80代" ],
+			aryCity							: [],
 			// 勤務地一覧
-			aryWorkLocation: [ '高知県内全域', '高知市', '室戸市', '安芸市', '南国市', '土佐市', '須崎市', '宿毛市', '土佐清水市', '四万十市', '香南市', '香美市', '東洋町', '奈半利町', '田野町', '安田町', '北川村', '馬路村', '芸西村', '本山町', '大豊町', '土佐町', '大川村', 'いの町', '仁淀川町', '中土佐町', '佐川町', '越知町', '檮原町', '日高村', '津野町', '四万十町', '大月町', '三原村', '黒潮町' ],
+			aryWorkLocation			: [ '高知県内全域', '高知市', '室戸市', '安芸市', '南国市', '土佐市', '須崎市', '宿毛市', '土佐清水市', '四万十市', '香南市', '香美市', '東洋町', '奈半利町', '田野町', '安田町', '北川村', '馬路村', '芸西村', '本山町', '大豊町', '土佐町', '大川村', 'いの町', '仁淀川町', '中土佐町', '佐川町', '越知町', '檮原町', '日高村', '津野町', '四万十町', '大月町', '三原村', '黒潮町' ],
 			// 契約形態一覧
-			aryEmploymentStatus: [ 'アルバイト・パート', '日雇い', '臨時（季節雇用）', '正社員', '契約社員', '派遣社員', '請負', '業務委託', 'その他' ],
+			aryEmploymentStatus	: [ 'アルバイト・パート', '日雇い', '臨時（季節雇用）', '正社員', '契約社員', '派遣社員', '請負', '業務委託', 'その他' ],
 			// 曜日一覧
-			aryDay: [ '月', '火', '水', '木', '金', '土', '日', '祝' ],
+			aryDay							: [ '月', '火', '水', '木', '金', '土', '日', '祝' ],
 		}
 	},
 	computed: {
@@ -48,9 +48,9 @@ Vue.component('tc-search-filter', {
 	},
 	mounted: async function() {
 		this.aryCity = await _connectMySQLaxios({
-			db: { name: 'tc2_digitown' },
+			db		: { name: 'tc2_digitown' },
 			action: 'get',
-			table: 'dt1_city_master'
+			table	: 'dt1_city_master'
 		});
 	},
 	methods: {
@@ -58,17 +58,17 @@ Vue.component('tc-search-filter', {
 		 * 検索ボタンが押された時の処理
 		--------------------------------------------------------------------- */
 		onSearch() {
-			const query = encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '年齢 >= 16' ]));
+			const query			= encodeURI(_getQueryText(this.inputInfo, [ 'LINEユーザーID != ""', '年齢 >= 16' ]));
 			// クエリパラメータ生成①
-			const aryParam = [];
+			const aryParam	= [];
 			// 「スカウトする」にはssectの値がないのでif文はコメントアウト
 			// if (this.ssect && this.scost && this.group) {
-			const addParam = {
-				view: VIEW_ID,
-				query: query,
-				ssect: this.ssect,
-				scost: this.scost,
-				officeGroup: this.group
+			const addParam	= {
+				view				: VIEW_ID,
+				query				: query,
+				ssect				: this.ssect,
+				scost				: this.scost,
+				officeGroup	: this.group
 			};
 			for (const param in addParam) aryParam.push(`${param}=${addParam[param]}`);
 			// }
